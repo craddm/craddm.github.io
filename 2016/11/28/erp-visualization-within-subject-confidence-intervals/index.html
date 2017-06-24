@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="">
+  <meta name="generator" content="Hugo 0.20.7" />
+
+  <title>ERP Visualization: Within-subject confidence intervals &middot; Time-frequency Transform</title>
+
+  
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pure/0.6.2/pure-min.css">
+
+  <!--[if lte IE 8]>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pure/0.6.2/grids-responsive-old-ie-min.css">
+  <![endif]-->
+  <!--[if gt IE 8]><!-->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pure/0.6.2/grids-responsive-min.css">
+  <!--<![endif]-->
+
+  <!--[if lte IE 8]>
+  <link rel="stylesheet" href="../../../../css/side-menu-old-ie.css">
+  <![endif]-->
+  <!--[if gt IE 8]><!-->
+  <link rel="stylesheet" href="../../../../css/side-menu.css">
+  <!--<![endif]-->
+
+  <link rel="stylesheet" href="../../../../css/blackburn.css">
+
+  
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+  
+  <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet" type="text/css">
+
+  
+  
+
+  
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.11.0/styles/androidstudio.min.css">
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.11.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+  
+
+  <link rel="shortcut icon" href="../../../../img/favicon.ico" type="image/x-icon" />
+
+  
+    <link rel="stylesheet" href="../../../../css/custom.css">
+  
+  
+
+</head>
+
+
+<body>
+<div id="layout">
+
+  
+<a href="#menu" id="menuLink" class="menu-link">
+  
+  <span></span>
+</a>
+<div id="menu">
+
+  
+  <a class="pure-menu-heading brand" href="../../../../">The TFT</a>
+
+
+  <div class="pure-menu">
+    <ul class="pure-menu-list">
+      
+      
+        <li class="pure-menu-item">
+          <a class="pure-menu-link" href="../../../../"><i class='fa fa-home fa-fw'></i>Home</a>
+      
+        </li>
+      
+      
+        <li class="pure-menu-item">
+          <a class="pure-menu-link" href="../../../../post/"><i class='fa fa-list fa-fw'></i>Posts</a>
+      
+        </li>
+      
+      
+        <li class="pure-menu-item">
+          <a class="pure-menu-link" href="../../../../about/"><i class='fa fa-user fa-fw'></i>About</a>
+      
+        </li>
+      
+    </ul>
+  </div>
+
+  <div class="pure-menu social">
+  <ul class="pure-menu-list">
+
+    
+
+    
+
+    
+    <li class="pure-menu-item">
+      <a class="pure-menu-link" href="https://twitter.com/Matt_Craddock" target="_blank"><i class="fa fa-twitter-square fa-fw"></i>Twitter</a>
+    </li>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <li class="pure-menu-item">
+      <a class="pure-menu-link" href="https://github.com/craddm" target="_blank"><i class="fa fa-github-square fa-fw"></i>GitHub</a>
+    </li>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+  </ul>
+</div>
+
+
+  <div>
+  <div class="small-print">
+    <small>&copy; 2016-2017. All rights reserved.</small>
+  </div>
+  <div class="small-print">
+    <small>Built with&nbsp;<a href="https://gohugo.io/" target="_blank">Hugo</a></small>
+    <small>Theme&nbsp;<a href="https://github.com/yoshiharuyamashita/blackburn" target="_blank">Blackburn</a></small>
+  </div>
+</div>
+
+</div>
+
+
+  <div id="main">
+
+
+<div class="header">
+  <h1>ERP Visualization: Within-subject confidence intervals</h1>
+  <h2></h2>
+</div>
+<div class="content">
+
+  <div class="post-meta">
+
+  <div>
+    <i class="fa fa-calendar fa-fw"></i>
+    <time>28 Nov 2016</time>
+  </div>
+
+  
+
+  
+
+  
+  
+  
+  <div>
+    <i class="fa fa-tags fa-fw"></i>
+    
+      <a class="post-taxonomy-tag" href="../../../../tags/eeg">EEG</a>&nbsp;&#47;
+    
+      <a class="post-taxonomy-tag" href="../../../../tags/erps">ERPs</a>&nbsp;&#47;
+    
+      <a class="post-taxonomy-tag" href="../../../../tags/statistics">statistics</a>&nbsp;&#47;
+    
+      <a class="post-taxonomy-tag" href="../../../../tags/r">R</a>&nbsp;&#47;
+    
+      <a class="post-taxonomy-tag" href="../../../../tags/ggplot2">ggplot2</a>
+    
+  </div>
+  
+  
+
+</div>
+
+  <p>As I mentioned in a previous post, between-subject confidence intervals/standard errors are not necessarily all that useful when your data is within-subjects. What you’re interested in is the not really the between-subject variability but the variability of the differences between your conditions within subjects. I’m going to use here the command <strong>summarySEwithin</strong> from the package <strong><em>Rmisc</em></strong>. This removes between-subject variability for within-subject variables, returning corrected standard deviations, standard errors, and confidence intervals. These are adjusted using the Cousineau-Morey method <a href="http://pcl.missouri.edu/node/63">(2008)</a>, and you can also find some more examples over on <a href="http://www.cookbook-r.com/Graphs/Plotting_means_and_error_bars_(ggplot2)/">Cookbook-R</a>. Let’s prep the data and load all the packages I’ll need.</p>
+<pre class="r"><code>library(ggplot2)
+library(reshape2)
+library(Rmisc)
+library(dplyr)
+library(purrr)
+library(magrittr)
+
+levCatGA &lt;- read.csv(&quot;https://raw.githubusercontent.com/craddm/ExploringERPs/master/levCatObjNon.csv&quot;,
+                     header = FALSE)
+names(levCatGA) &lt;- c(&quot;Object&quot;, &quot;Non-Object&quot;, &quot;Time&quot;, &quot;Subject&quot;)
+levCatGA &lt;- levCatGA[(levCatGA$Time &gt;= -100) &amp; (levCatGA$Time &lt;= 400),]
+levCatGA$Subject &lt;- as.factor(levCatGA$Subject)
+levCatGA &lt;- melt(levCatGA, id.vars = c(&quot;Subject&quot;, &quot;Time&quot;))
+names(levCatGA) &lt;- c(&quot;Subject&quot;, &quot;Time&quot;, &quot;condition&quot;, &quot;amplitude&quot;)
+
+theme_set(theme_classic())
+
+levCat.plot &lt;- ggplot(levCatGA, aes(Time, amplitude))+
+  scale_color_brewer(palette = &quot;Set1&quot;)</code></pre>
+<p>Now let’s run t-tests on each timepoint (again, using <a href="../blog/2016/10/06/2016/10/06/ERP-Vis-Running-Tests"><strong><em>purrr</em></strong></a>) and also summarize the data using the <strong>summarySEwithin</strong> function from <strong><em>Rmisc</em></strong>.</p>
+<pre class="r"><code>runningT &lt;- levCatGA %&gt;%
+    split(.$Time) %&gt;%
+    map(~t.test(amplitude~condition, paired = TRUE, data = .))
+  
+runningSE &lt;- levCatGA %&gt;%
+  split(.$Time) %&gt;%
+  map(~summarySEwithin(data = ., measurevar = &quot;amplitude&quot;,
+                       withinvars = &quot;condition&quot;, idvar = &quot;Subject&quot;))</code></pre>
+<p>I now have two lists, <strong>runningT</strong>, containing the t-test result for each timepoint, and <strong>runningSE</strong>, containing the summarized data from each time point and the corrected SEs/CIs. For example:</p>
+<pre class="r"><code>runningT$`0`</code></pre>
+<pre><code>## 
+##  Paired t-test
+## 
+## data:  amplitude by condition
+## t = 0.35813, df = 14, p-value = 0.7256
+## alternative hypothesis: true difference in means is not equal to 0
+## 95 percent confidence interval:
+##  -0.2085599  0.2921698
+## sample estimates:
+## mean of the differences 
+##              0.04180494</code></pre>
+<pre class="r"><code>runningSE$`0`</code></pre>
+<pre><code>##    condition  N  amplitude        sd         se        ci
+## 1     Object 15 -0.2065029 0.3196832 0.08254185 0.1770347
+## 2 Non-Object 15 -0.2483078 0.3196832 0.08254185 0.1770347</code></pre>
+<p>As before, I’ll extract the p-value for each t-test and store it in a custom data-frame for later plotting. Let’s plot the ERPs with standard between-subject confidence intervals.</p>
+<pre class="r"><code>pvals &lt;- data.frame(
+  Time = unique(levCatGA$Time),
+  p.value = map_dbl(runningT,&quot;p.value&quot;)
+  )
+
+pvals$crit &lt;- 0+(pvals$p.value &lt;= .05)
+pvals$crit[pvals$crit == 0] &lt;- NA
+
+levCat.plot+
+  stat_summary(fun.data = mean_cl_boot, geom = &quot;ribbon&quot;,
+               aes(fill = condition, colour = condition), 
+               linetype = &quot;dashed&quot;,alpha = 0.3)+
+  guides(fill = &quot;none&quot;)+
+  stat_summary(fun.y = mean,geom = &quot;line&quot;, size = 1, aes(colour = condition))+
+  labs(x = &quot;Time (ms)&quot;, y = expression(paste(&quot;Amplitude (&quot;,mu,&quot;V)&quot;)), colour = &quot;&quot;)+
+  geom_line(data = pvals, aes(x = Time, y = crit-3), na.rm = TRUE, size = 2)+
+  geom_vline(xintercept = 0, linetype = &quot;dashed&quot;)+
+  geom_hline(yintercept = 0, linetype = &quot;dashed&quot;)</code></pre>
+<p><img src="../../../../post/2016-11-28-ERP-Within-Subject-CIs_files/figure-html/betweenSubj-1.svg" width="576" /></p>
+<p>The confidence intervals in the between-subjects plot don’t really help you see that the signficant timepoints are actually significant. Let’s re-plot the figure using within-subject CIs. I use here some new commands. Using <strong>map_df</strong> from <strong><em>purrr</em></strong>, I convert runningSE, a list of data frames, into a single data frame summarizing the data at each time-point after removing between-subject variability. This also uses <strong>extract</strong> function from <strong><em>magrittr</em></strong>. I then pass this data frame to geom_ribbon to plot the corrected CIs. I could also use it to plot the ERPS, but I’ll just let ggplot figure them out from the original data.</p>
+<pre class="r"><code>WSCI &lt;- map_df(runningSE, extract) %&gt;%
+  mutate(
+    Time = rep(unique(levCatGA$Time), each = 2) 
+    #Note, you&#39;ll have to change 2 to match the number of conditions
+    )
+  
+levCat.plot+
+  geom_ribbon(data = WSCI, aes(ymin = amplitude-ci, ymax = amplitude+ci,
+                               fill = condition, colour = condition), 
+              linetype=&quot;dashed&quot;, alpha = 0.3)+
+  guides(fill = &quot;none&quot;)+
+  stat_summary(fun.y = mean, geom = &quot;line&quot;, size = 1, aes(colour = condition))+
+  labs(x = &quot;Time (ms)&quot;, y = expression(paste(&quot;Amplitude (&quot;,mu,&quot;V)&quot;)), colour = &quot;&quot;)+
+  geom_line(data = pvals, aes(x = Time, y = crit-3),na.rm = TRUE,size = 2)+
+  geom_vline(xintercept = 0, linetype = &quot;dashed&quot; )+
+  geom_hline(yintercept = 0, linetype = &quot;dashed&quot;)</code></pre>
+<p><img src="../../../../post/2016-11-28-ERP-Within-Subject-CIs_files/figure-html/withinCI-1.svg" width="576" /></p>
+<p>These confidence intervals are much narrower, reflecting the correlation between measures within participants. These intervals make it easier to see where significant differences lie from the degree of overlap between.</p>
+<p>Finally, let’s overlap the two types of confidence interval.</p>
+<pre class="r"><code>levCat.plot+
+  stat_summary(fun.data = mean_cl_normal, geom = &quot;ribbon&quot;, aes(colour = condition), 
+               fill = NA, linetype = &quot;dotted&quot;, alpha = 0.3)+
+  geom_ribbon(data = WSCI, aes(ymin = amplitude-ci, ymax = amplitude+ci, fill = condition,
+                              colour = condition), linetype=&quot;dashed&quot;, alpha = 0.3)+
+  guides(fill = &quot;none&quot;)+
+  stat_summary(fun.y = mean, geom = &quot;line&quot;, size = 1, aes(colour = condition))+
+  labs(x = &quot;Time (ms)&quot;, y = expression(paste(&quot;Amplitude (&quot;, mu,&quot;V)&quot;)), colour = &quot;&quot;)+
+  geom_line(data = pvals, aes(x = Time, y = crit-3), na.rm = TRUE, size = 2)+
+  geom_vline(xintercept = 0, linetype = &quot;dashed&quot; )+
+  geom_hline(yintercept = 0, linetype = &quot;dashed&quot;)</code></pre>
+<p><img src="../../../../post/2016-11-28-ERP-Within-Subject-CIs_files/figure-html/bothTypes-1.svg" width="576" /></p>
+<p>Filled, dashed lines indicate within-subject confidence intervals, while the outer, dotted lines show the position of the between-subject confidence intervals. As we saw above, the WSCIs are much narrower, largely due to the correlation between measures from within-participants.</p>
+<p>So be careful interpreting differences from confidence intervals - check whether they show within or between subject differences before using them for Eyeball Mark I inference.</p>
+
+
+  
+<div class="prev-next-post pure-g">
+  <div class="pure-u-1-24" style="text-align: left;">
+    
+    <a href="../../../../2016/10/06/running-statistical-tests/"><i class="fa fa-chevron-left"></i></a>
+    
+  </div>
+  <div class="pure-u-10-24">
+    
+    <nav class="prev">
+      <a href="../../../../2016/10/06/running-statistical-tests/">ERP Visualization: timepoint-by-timepoint tests</a>
+    </nav>
+    
+  </div>
+  <div class="pure-u-2-24">
+    &nbsp;
+  </div>
+  <div class="pure-u-10-24">
+    
+    <nav class="next">
+      <a href="../../../../2016/12/07/erp-visualization-basic-shiny-demo/">ERP visualization: Basic Shiny Demo</a>
+    </nav>
+    
+  </div>
+  <div class="pure-u-1-24" style="text-align: right;">
+    
+    <a href="../../../../2016/12/07/erp-visualization-basic-shiny-demo/"><i class="fa fa-chevron-right"></i></a>
+    
+  </div>
+</div>
+
+
+
+  
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+
+(function() {
+    
+    
+    if (window.location.hostname == "localhost")
+        return;
+
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    var disqus_shortname = 'craddmatgithub';
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+</div>
+
+</div>
+</div>
+<script src="../../../../js/ui.js"></script>
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'Your Google Analytics tracking ID', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+
+</body>
+</html>
+

@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="">
+  <meta name="generator" content="Hugo 0.20.7" />
+
+  <title>Maps of the 2015 election results in Great Britain &middot; Time-frequency Transform</title>
+
+  
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pure/0.6.2/pure-min.css">
+
+  <!--[if lte IE 8]>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pure/0.6.2/grids-responsive-old-ie-min.css">
+  <![endif]-->
+  <!--[if gt IE 8]><!-->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pure/0.6.2/grids-responsive-min.css">
+  <!--<![endif]-->
+
+  <!--[if lte IE 8]>
+  <link rel="stylesheet" href="../../../../css/side-menu-old-ie.css">
+  <![endif]-->
+  <!--[if gt IE 8]><!-->
+  <link rel="stylesheet" href="../../../../css/side-menu.css">
+  <!--<![endif]-->
+
+  <link rel="stylesheet" href="../../../../css/blackburn.css">
+
+  
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+  
+  <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet" type="text/css">
+
+  
+  
+
+  
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.11.0/styles/androidstudio.min.css">
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.11.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+  
+
+  <link rel="shortcut icon" href="../../../../img/favicon.ico" type="image/x-icon" />
+
+  
+    <link rel="stylesheet" href="../../../../css/custom.css">
+  
+  
+
+</head>
+
+
+<body>
+<div id="layout">
+
+  
+<a href="#menu" id="menuLink" class="menu-link">
+  
+  <span></span>
+</a>
+<div id="menu">
+
+  
+  <a class="pure-menu-heading brand" href="../../../../">The TFT</a>
+
+
+  <div class="pure-menu">
+    <ul class="pure-menu-list">
+      
+      
+        <li class="pure-menu-item">
+          <a class="pure-menu-link" href="../../../../"><i class='fa fa-home fa-fw'></i>Home</a>
+      
+        </li>
+      
+      
+        <li class="pure-menu-item">
+          <a class="pure-menu-link" href="../../../../post/"><i class='fa fa-list fa-fw'></i>Posts</a>
+      
+        </li>
+      
+      
+        <li class="pure-menu-item">
+          <a class="pure-menu-link" href="../../../../about/"><i class='fa fa-user fa-fw'></i>About</a>
+      
+        </li>
+      
+    </ul>
+  </div>
+
+  <div class="pure-menu social">
+  <ul class="pure-menu-list">
+
+    
+
+    
+
+    
+    <li class="pure-menu-item">
+      <a class="pure-menu-link" href="https://twitter.com/Matt_Craddock" target="_blank"><i class="fa fa-twitter-square fa-fw"></i>Twitter</a>
+    </li>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <li class="pure-menu-item">
+      <a class="pure-menu-link" href="https://github.com/craddm" target="_blank"><i class="fa fa-github-square fa-fw"></i>GitHub</a>
+    </li>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+  </ul>
+</div>
+
+
+  <div>
+  <div class="small-print">
+    <small>&copy; 2016-2017. All rights reserved.</small>
+  </div>
+  <div class="small-print">
+    <small>Built with&nbsp;<a href="https://gohugo.io/" target="_blank">Hugo</a></small>
+    <small>Theme&nbsp;<a href="https://github.com/yoshiharuyamashita/blackburn" target="_blank">Blackburn</a></small>
+  </div>
+</div>
+
+</div>
+
+
+  <div id="main">
+
+
+<div class="header">
+  <h1>Maps of the 2015 election results in Great Britain</h1>
+  <h2></h2>
+</div>
+<div class="content">
+
+  <div class="post-meta">
+
+  <div>
+    <i class="fa fa-calendar fa-fw"></i>
+    <time>02 May 2017</time>
+  </div>
+
+  
+
+  
+
+  
+  
+  
+  <div>
+    <i class="fa fa-tags fa-fw"></i>
+    
+      <a class="post-taxonomy-tag" href="../../../../tags/r">R</a>&nbsp;&#47;
+    
+      <a class="post-taxonomy-tag" href="../../../../tags/ggplot2">ggplot2</a>&nbsp;&#47;
+    
+      <a class="post-taxonomy-tag" href="../../../../tags/politics">politics</a>
+    
+  </div>
+  
+  
+
+</div>
+
+  <p>Occassionally I do something other than playing with EEG data. R can also handle a lot of spatial data - in other words, you can create nice maps. There’s the small matter of an election coming up next month which is probably our last chance of avoiding a disastrous Brexit.</p>
+<p>I decided to try out some of R’s mapping functions and packages to see if I could come up with any useful graphics of the sort you usually see: maps showing turn-out, who won each constituency, things like that.</p>
+<p>The first step was to download a <a href="https://en.wikipedia.org/wiki/Shapefile">shapefile</a> with parliamentary constituency boundaries. A shapefile is a popular vector format used in geographic information system (GIS) software. The Office of National Statistics’ <a href="https://geoportal.statistics.gov.uk/">Geoportal</a> provides many such maps for free. I downloaded the “Generalized Clipped Boundaries” map of Great Britain <a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a> - sorry Northern Ireland, I’d have to get a separate shapefile for you and it’s beyond my ability to combine them right now! I loaded it using the <em>rgdal</em> package. Essentially, the shapefile provides a set of polygons, each for a single constituency.</p>
+<pre><code>## OGR data source with driver: ESRI Shapefile 
+## Source: &quot;C:\Users\Matt\Downloads\Westminster_Parliamentary_Constituencies_December_2015_Generalised_Clipped_Boundaries_in_Great_Britain&quot;, layer: &quot;Westminster_Parliamentary_Constituencies_December_2015_Generalised_Clipped_Boundaries_in_Great_Britain&quot;
+## with 632 features
+## It has 5 fields
+## Integer64 fields read as strings:  objectid</code></pre>
+<p>First up I checked I’d loaded the map in and could plot it at all. Because I like to use ggplot, I converted the shapefile to a tibble using the <em>broom</em> package’s <em>tidy</em> function. The shapefile has several accessible “regions” which give identifiers for individual polygons. In this case, these are “objectid” (not very useful, simply a number from 1 to 632), “pcon15cd” (a factor with unique identifier for each constituency - <em>very</em> useful), and “pcon15nm” (a factor with the name of each constituency - <em>quite</em> useful). For this I’lll use “pcon15cd”, the unique identifier. It turns out the constituency names can differ slighltly across different datasets, while the unique identifier is always identical.</p>
+<pre class="r"><code>gb_tidy &lt;- tidy(gb_map, region = &quot;pcon15cd&quot;)
+
+ggplot() +
+geom_polygon(data = gb_tidy, 
+          aes(x = long, y = lat, group = group),
+          color = &quot;black&quot;, fill = &#39;light green&#39;, size = .2, alpha = 0.5) + 
+  theme_minimal() +
+  labs(x = &quot;Longitude&quot;, y = &quot;Latitude&quot;)+
+  coord_quickmap()</code></pre>
+<p><img src="../../../../post/2017-05-02-GB-electoral-maps_files/figure-html/map_of_gb-1.png" width="50%" /></p>
+<p>Next I downloaded the 2015 election results from the <a href="http://www.electoralcommission.org.uk/our-work/our-research/electoral-data">Electoral Commission</a><a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a>. These are available under the <a href="http://www.nationalarchives.gov.uk/doc/open-government-licence/version/2/">Open Government Licence v2.0</a>. The results I’m interested in are actually spread across two different files. One contains the vote breakdown for every constituency - thus, the names of candidate, every party, and how many votes they received. The other contains, amongst other things, the total number of votes cast and the size of the electorate for each constituency.</p>
+<p>Let’s make some some maps!</p>
+<p>First, I’ll load the two files and do a little wrangling. From one file I take the valid vote and electorate counts for each constituency and calculate turnout i.e. the percentage of votes cast out of the maximum possible. I join the two files together based on the Constituency ID number, then select only the columns I’m really interested in - constituency name, constituency ID, party abbreviation, vote share (%), and turnout, and filter out Northern Ireland, for which I don’t currently have a shapefile.</p>
+<p>Let’s create a map showing which party won each constituency. First I’ll define a colour palette that covers the winning parties, all using their usual acronym. “Spk” is for the Speaker of the House of Commons, who is, officially, neutral. Then I extract the winner of each constituency. Since the file is already arranged such that the votes are in descending order within in each constituency, I simply take the first row from each using <em>slice</em>.</p>
+<pre class="r"><code>party_palette &lt;- c(&quot;Con&quot; = &quot;dodgerblue3&quot;, &quot;Lab&quot; = &quot;red2&quot;, &quot;LD&quot; = &quot;orange&quot;,
+                   &quot;SNP&quot; = &quot;gold&quot;, &quot;Green&quot; = &quot;chartreuse3&quot;, &quot;PC&quot; = &quot;darkgreen&quot;,
+                   &quot;UKIP&quot; = &quot;purple&quot;, &quot;Spk&quot; = &quot;grey&quot;)
+
+winner &lt;- group_by(results_2015, `Constituency ID`) %&gt;%
+  slice(1) %&gt;%
+  ungroup() %&gt;%
+  right_join(., gb_tidy, by = c(&quot;Constituency ID&quot; = &quot;id&quot;))
+
+colour_by_winner &lt;- ggplot(data = winner,
+         aes(x = long, y = lat, group = group)) +
+  geom_polygon(aes(fill = `Party abbreviation`),
+          color = NA) +
+  geom_path(colour = &quot;white&quot;, size = 0.01, alpha = 0.1) +
+  theme_minimal() +
+  scale_fill_manual(values = party_palette, na.value = &quot;slategrey&quot;) +
+  theme(panel.grid = element_blank(),
+        axis.title = element_blank(),
+        axis.ticks = element_blank(),
+        axis.text = element_blank()) +
+  coord_quickmap()+
+  guides(fill = guide_legend(&quot;&quot;, keywidth = 0.6, keyheight = 0.6)) +
+  ggtitle(&quot;Winning party&quot;)
+
+colour_by_winner</code></pre>
+<p><img src="../../../../post/2017-05-02-GB-electoral-maps_files/figure-html/winner_map-1.png" width="672" /></p>
+<p>Now we want to have some other maps to compare it to. Let’s start with a map that shows turnout (i.e. the percentage of votes cast of the maximum possible). We’ll cut turnout into bins. The minimum turnout in a constituency was around 51%. This is a little higher than I’ve seen reported elsewhere, but these figures come directly from the Electoral Commission. I create a discrete scale using <em>cut</em>.</p>
+<pre class="r"><code>winner$turnout_bin &lt;- cut(winner$turnout, breaks = c(0, 0.5, 0.6, 0.7, 0.8, 1),
+                          labels = c(&quot;&lt;50%&quot;, &quot;50-60%&quot;, &quot;60-70%&quot;, &quot;70-80%&quot;, &quot;&gt;80%&quot;))
+
+colour_by_turnout &lt;- ggplot(data = winner,
+                            aes(x = long, y = lat, group = group)) +
+  geom_polygon(aes(fill = turnout_bin),
+          color = NA) +
+  geom_path(colour = &quot;white&quot;, size = 0.01, alpha = 0.1) +
+  theme_minimal() +
+  scale_fill_viridis(discrete = TRUE)+
+  theme(panel.grid = element_blank(),
+        axis.title = element_blank(),
+        axis.ticks = element_blank(),
+        axis.text = element_blank()) +
+  guides(fill = guide_legend(&quot;&quot;, keywidth = 0.6, keyheight = 0.6)) +
+  ggtitle(&quot;Electoral Turnout&quot;) +
+  coord_quickmap()
+
+colour_by_turnout</code></pre>
+<p><img src="../../../../post/2017-05-02-GB-electoral-maps_files/figure-html/turnout_map-1.png" width="672" /></p>
+<p>Next up we’ll create a map for the share of the vote achieved by the winner. Again, we’ll create a discrete scale from the continuous measure that is the share of the vote, to aid visualization.</p>
+<pre class="r"><code>winner$share_bin &lt;- cut(winner$`Share (%)`, breaks = c(0, 30, 40, 50, 60, 70, 80, 100),
+                        labels = c(&quot;&lt;30%&quot;, &quot;30-40%&quot;, &quot;40-50%&quot;, &quot;50-60%&quot;, &quot;60-70%&quot;, &quot;70-80%&quot;, &quot;&gt;80%&quot;))
+
+colour_by_share &lt;- ggplot(data = winner, aes(x = long, y = lat, group = group)) +
+  geom_polygon(aes(fill = share_bin),
+          color = NA)+
+  geom_path(colour = &quot;white&quot;, size = 0.01, alpha = 0.1) +
+  scale_fill_viridis(discrete = TRUE) +
+  theme_minimal() +
+  theme(panel.grid = element_blank(),
+        axis.title = element_blank(),
+        axis.ticks = element_blank(),
+        axis.text = element_blank()) + 
+  guides(fill = guide_legend(&quot;&quot;, keywidth = 0.6, keyheight = 0.6)) +
+  ggtitle(&quot;Vote share&quot;)+
+  coord_quickmap()
+
+colour_by_share </code></pre>
+<p><img src="../../../../post/2017-05-02-GB-electoral-maps_files/figure-html/map_vote_share-1.png" width="672" /></p>
+<p>Perhaps more interesting than <em>overall</em> vote share is how big a margin there is between the winner and the runner-up. For this we’ll need to slice our data up slightly differently. Instead of taking just the first row from each constituency, I take the first two rows. I then calculate the difference between the share of the vote for the winner and the runner-up using the very hand <em>lead</em> function from <em>dplyr</em>, which lets me offset values by other values an arbitrary number of rows away. I then chuck out the second row, so all I have is the winner. Finally, I’ll discretize the scale again and create one last map.</p>
+<pre class="r"><code>winner_lead &lt;- results_2015 %&gt;%
+  select(`Constituency Name`, `Constituency ID`, `Party abbreviation`, `Share (%)`) %&gt;% 
+  group_by(`Constituency ID`) %&gt;%
+  slice(1:2) %&gt;%
+  mutate(Margin = `Share (%)` - lead(`Share (%)`, default = first(`Share (%)`))) %&gt;%
+  slice(1) %&gt;%
+  ungroup() %&gt;%
+  select(`Constituency ID`, Margin) %&gt;%
+  left_join(gb_tidy, by = c(&quot;Constituency ID&quot; = &quot;id&quot;))
+
+winner_lead$Margin_bin &lt;- cut(winner_lead$Margin,
+                              breaks = c(0, 10, 20, 30, 40, 50, 100),
+                              labels = c(&quot;&lt;10%&quot;, &quot;10-20%&quot;, &quot;20-30%&quot;,
+                                         &quot;30-40%&quot;, &quot;40-50%&quot;, &quot;&gt;50%&quot;))
+
+colour_by_lead &lt;- ggplot(data = winner_lead, aes(x = long, y = lat, group = group))+
+  geom_polygon(aes(fill = Margin_bin), color = NA) +
+  geom_path(colour = &quot;white&quot;, size = 0.01, alpha = 0.1) +
+  scale_fill_viridis(discrete=TRUE) +
+  theme_minimal()+
+  theme(panel.grid = element_blank(),
+        axis.title = element_blank(),
+        axis.ticks = element_blank(),
+        axis.text = element_blank()) + 
+  guides(fill = guide_legend(title = &quot;&quot;, keywidth = 0.6, keyheight = 0.6)) +
+  ggtitle(&quot;Victory margin&quot;)+
+  coord_quickmap()
+
+colour_by_lead </code></pre>
+<p><img src="../../../../post/2017-05-02-GB-electoral-maps_files/figure-html/margin_map-1.png" width="672" /></p>
+<p>Now to finish off, let’s place them all side-by-side.</p>
+<pre class="r"><code>grid.arrange(colour_by_winner, colour_by_turnout, colour_by_share,
+             colour_by_lead, nrow = 2)</code></pre>
+<p><img src="../../../../post/2017-05-02-GB-electoral-maps_files/figure-html/plot_all-1.png" width="672" /></p>
+<p>What I’d like to do next is make these plots interactive, so that you can, for example, hover over each constituency and retrieve vote share, turnout etc. Two options for doing that are the packages <strong>plotly</strong>, which can turn any ggplot into an interactive plot trivially, and <strong>leaflet</strong>, which is specifically intended for producing interactive maps. I’ll be trying that out soon.</p>
+<hr />
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>Contains OS data © Crown copyright and database right [2017]<a href="#fnref1">↩</a></p></li>
+<li id="fn2"><p>Electoral Commission, 2015 UK Electoral data, accessed on 02/05/2017<a href="#fnref2">↩</a></p></li>
+</ol>
+</div>
+
+
+  
+<div class="prev-next-post pure-g">
+  <div class="pure-u-1-24" style="text-align: left;">
+    
+    <a href="../../../../2017/04/19/eeg-processing-with-python-but-in-r/"><i class="fa fa-chevron-left"></i></a>
+    
+  </div>
+  <div class="pure-u-10-24">
+    
+    <nav class="prev">
+      <a href="../../../../2017/04/19/eeg-processing-with-python-but-in-r/">EEG processing with Python, but in R?</a>
+    </nav>
+    
+  </div>
+  <div class="pure-u-2-24">
+    &nbsp;
+  </div>
+  <div class="pure-u-10-24">
+    
+    <nav class="next">
+      <a href="../../../../2017/06/24/testing-draft-functions/">testing draft functions</a>
+    </nav>
+    
+  </div>
+  <div class="pure-u-1-24" style="text-align: right;">
+    
+    <a href="../../../../2017/06/24/testing-draft-functions/"><i class="fa fa-chevron-right"></i></a>
+    
+  </div>
+</div>
+
+
+
+  
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+
+(function() {
+    
+    
+    if (window.location.hostname == "localhost")
+        return;
+
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    var disqus_shortname = 'craddmatgithub';
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+</div>
+
+</div>
+</div>
+<script src="../../../../js/ui.js"></script>
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'Your Google Analytics tracking ID', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+
+</body>
+</html>
+

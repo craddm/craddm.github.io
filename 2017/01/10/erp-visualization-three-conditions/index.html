@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="">
+  <meta name="generator" content="Hugo 0.20.7" />
+
+  <title>ERP visualization: Three conditions &middot; Time-frequency Transform</title>
+
+  
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pure/0.6.2/pure-min.css">
+
+  <!--[if lte IE 8]>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pure/0.6.2/grids-responsive-old-ie-min.css">
+  <![endif]-->
+  <!--[if gt IE 8]><!-->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pure/0.6.2/grids-responsive-min.css">
+  <!--<![endif]-->
+
+  <!--[if lte IE 8]>
+  <link rel="stylesheet" href="../../../../css/side-menu-old-ie.css">
+  <![endif]-->
+  <!--[if gt IE 8]><!-->
+  <link rel="stylesheet" href="../../../../css/side-menu.css">
+  <!--<![endif]-->
+
+  <link rel="stylesheet" href="../../../../css/blackburn.css">
+
+  
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+  
+  <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet" type="text/css">
+
+  
+  
+
+  
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.11.0/styles/androidstudio.min.css">
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.11.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+  
+
+  <link rel="shortcut icon" href="../../../../img/favicon.ico" type="image/x-icon" />
+
+  
+    <link rel="stylesheet" href="../../../../css/custom.css">
+  
+  
+
+</head>
+
+
+<body>
+<div id="layout">
+
+  
+<a href="#menu" id="menuLink" class="menu-link">
+  
+  <span></span>
+</a>
+<div id="menu">
+
+  
+  <a class="pure-menu-heading brand" href="../../../../">The TFT</a>
+
+
+  <div class="pure-menu">
+    <ul class="pure-menu-list">
+      
+      
+        <li class="pure-menu-item">
+          <a class="pure-menu-link" href="../../../../"><i class='fa fa-home fa-fw'></i>Home</a>
+      
+        </li>
+      
+      
+        <li class="pure-menu-item">
+          <a class="pure-menu-link" href="../../../../post/"><i class='fa fa-list fa-fw'></i>Posts</a>
+      
+        </li>
+      
+      
+        <li class="pure-menu-item">
+          <a class="pure-menu-link" href="../../../../about/"><i class='fa fa-user fa-fw'></i>About</a>
+      
+        </li>
+      
+    </ul>
+  </div>
+
+  <div class="pure-menu social">
+  <ul class="pure-menu-list">
+
+    
+
+    
+
+    
+    <li class="pure-menu-item">
+      <a class="pure-menu-link" href="https://twitter.com/Matt_Craddock" target="_blank"><i class="fa fa-twitter-square fa-fw"></i>Twitter</a>
+    </li>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <li class="pure-menu-item">
+      <a class="pure-menu-link" href="https://github.com/craddm" target="_blank"><i class="fa fa-github-square fa-fw"></i>GitHub</a>
+    </li>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+  </ul>
+</div>
+
+
+  <div>
+  <div class="small-print">
+    <small>&copy; 2016-2017. All rights reserved.</small>
+  </div>
+  <div class="small-print">
+    <small>Built with&nbsp;<a href="https://gohugo.io/" target="_blank">Hugo</a></small>
+    <small>Theme&nbsp;<a href="https://github.com/yoshiharuyamashita/blackburn" target="_blank">Blackburn</a></small>
+  </div>
+</div>
+
+</div>
+
+
+  <div id="main">
+
+
+<div class="header">
+  <h1>ERP visualization: Three conditions</h1>
+  <h2></h2>
+</div>
+<div class="content">
+
+  <div class="post-meta">
+
+  <div>
+    <i class="fa fa-calendar fa-fw"></i>
+    <time>10 Jan 2017</time>
+  </div>
+
+  
+
+  
+
+  
+  
+  
+  <div>
+    <i class="fa fa-tags fa-fw"></i>
+    
+      <a class="post-taxonomy-tag" href="../../../../tags/eeg">EEG</a>&nbsp;&#47;
+    
+      <a class="post-taxonomy-tag" href="../../../../tags/erps">ERPs</a>&nbsp;&#47;
+    
+      <a class="post-taxonomy-tag" href="../../../../tags/statistics">statistics</a>&nbsp;&#47;
+    
+      <a class="post-taxonomy-tag" href="../../../../tags/r">R</a>&nbsp;&#47;
+    
+      <a class="post-taxonomy-tag" href="../../../../tags/ggplot2">ggplot2</a>
+    
+  </div>
+  
+  
+
+</div>
+
+  <p>In an earlier post I took a look at visualizing ERPs from <a href="../../../../2016/09/19/comparing-two-erps/">two conditions at a single electrode</a>. This time I’m going to look at three conditions. As in the previous post, I’ll assume a basic familiarity with ERPs.</p>
+<p>First I’ll load in the full dataset, which contains ERPs for all conditions for all subjects, and whip it into shape.</p>
+<pre class="r"><code>library(ggplot2)
+library(tidyverse)
+library(afex)
+library(Rmisc)
+library(magrittr)
+
+levCatGAall &lt;- read_csv(
+  &quot;https://raw.githubusercontent.com/craddm/ExploringERPs/master/levCatGAall.csv&quot;,
+  col_names = c(&quot;Object.BB&quot;,&quot;Object.HSF&quot;,&quot;Object.LSF&quot;,&quot;Non-Object.LSF&quot;,&quot;Non-Object.HSF&quot;,&quot;Non-Object.BB&quot;,&quot;Time&quot;,&quot;Subject&quot;)
+  )
+levCatGAall &lt;- levCatGAall[c(1,2,3,6,5,4,7,8)]
+
+levCatGAall &lt;- levCatGAall %&gt;%
+  filter(Time &gt;= -100 &amp; Time &lt;= 400) %&gt;%
+  gather(condition,amplitude,-Subject,-Time) %&gt;%
+  separate(condition,c(&quot;Object&quot;,&quot;Frequency&quot;),sep= &quot;[.]&quot;,extra=&quot;merge&quot;)</code></pre>
+<div id="the-plots" class="section level2">
+<h2>The Plots</h2>
+<p>Let’s start off with a simple ERP plot with both within- and between-subject 95% confidence intervals <a href="../blog/2016/11/28/ERP-Within-Subject-CIs">(see previous post)</a>. Although the dataset is for a 2 x 3 design (Object X Spatial Frequency - for further details, check our article <a href="http://bmcneurosci.biomedcentral.com/articles/10.1186/s12868-015-0144-8">Early and late effects of objecthood and spatial frequency on event-related potentials and gamma band activity</a>) - I’ll be focussing entirely on the Spatial Frequency factor here. Frequency has three levels: high (HSF), broadband (BB), and low (LSF).</p>
+<pre class="r"><code># basic plot setup
+ERP.plot &lt;- ggplot(levCatGAall,aes(Time, amplitude))+
+  scale_color_brewer(palette = &quot;Dark2&quot;) +
+  scale_fill_brewer(palette = &quot;Dark2&quot;) +
+  theme_minimal()
+
+## Calculate running within-subject CIs
+runningCIs &lt;- levCatGAall %&gt;%
+  group_by(Frequency, Time, Subject) %&gt;%
+  dplyr::summarise(amplitude = mean(amplitude)) %&gt;%
+  split(.$Time) %&gt;%
+  map(~summarySEwithin(data = .,
+                       measurevar = &quot;amplitude&quot;,
+                       withinvars = c(&quot;Frequency&quot;),
+                       idvar = &quot;Subject&quot;))
+
+WSCI &lt;- map_df(runningCIs,magrittr::extract) %&gt;%
+  mutate(
+    Time = rep(unique(levCatGAall$Time),each =3) #Note, you&#39;ll have to change 3 to match the number of conditions
+    )
+
+ERP.plot+
+  geom_ribbon(data = WSCI,
+              aes(ymin = amplitude-ci,
+                  ymax = amplitude+ci,
+                  fill = Frequency,
+                  colour = Frequency),
+              linetype=&quot;dashed&quot;,
+              alpha = 0.3) +
+  guides(fill = &quot;none&quot;)+
+  stat_summary(fun.data = mean_cl_normal,
+               geom = &quot;ribbon&quot;,
+               size = 1,
+               aes(colour = Frequency),
+               linetype = &quot;dotted&quot;,
+               fill = NA,
+               alpha = 0.8)+
+  stat_summary(fun.y = mean,
+               geom = &quot;line&quot;,
+               size = 1,
+               aes(colour = Frequency),
+               alpha = 0.8)+
+  labs(x = &quot;Time (ms)&quot;,
+       y = expression(paste(&quot;Amplitude (&quot;,mu,&quot;V)&quot;)),
+       colour = &quot;&quot;)+
+  geom_vline(xintercept = 0,linetype = &quot;dashed&quot; )+
+  geom_hline(yintercept = 0,linetype = &quot;dashed&quot;)</code></pre>
+<p><img src="../../../../post/2017-01-10-ERP-Visualization-Part-2_files/figure-html/CIPlot-1.svg" width="576" /></p>
+<p>Looks like there are consistently higher amplitudes for the BB images from the P1 onwards until after the P2. The within-subject CIs definitely help here - between-subject CIs would have a lot of overlap, as you can probably see. Having both types of CIs on this plot is making it a little messy - I wouldn’t normally do this. We’ll plow on adding individual subject data.</p>
+<pre class="r"><code>ERP.plot +
+  stat_summary(fun.y = mean,geom = &quot;line&quot;,alpha = 0.4,aes(group =interaction(Subject,Frequency),colour = Frequency),size = 0.7) +
+  guides(alpha= &quot;none&quot;) +
+  geom_ribbon(data = WSCI,
+              aes(ymin = amplitude-ci,
+                  ymax = amplitude+ci,
+                  fill = Frequency,
+                  colour = Frequency),
+              linetype=&quot;dashed&quot;,
+              alpha = 0.3) +
+  stat_summary(fun.y = mean,geom = &quot;line&quot;,size = 1,aes(colour = Frequency),alpha = 0.8) +
+  labs(x = &quot;Time (ms)&quot;,y = expression(paste(&quot;Amplitude (&quot;,mu,&quot;V)&quot;)),colour = &quot;&quot;) +
+  guides(colour= &quot;none&quot;) +
+  geom_vline(xintercept = 0,linetype = &quot;dashed&quot;) +
+  geom_hline(yintercept = 0,linetype = &quot;dashed&quot;)</code></pre>
+<p><img src="../../../../post/2017-01-10-ERP-Visualization-Part-2_files/figure-html/indivAndGroup-1.svg" width="576" /></p>
+<p>Now it’s becoming a real mess, which can can only get worse when you add more conditions. Let’s split the conditions up.</p>
+<pre class="r"><code>ERP.plot+
+  facet_wrap(~Frequency)+
+  stat_summary(fun.y = mean,geom = &quot;line&quot;,aes(group = Subject),alpha = 0.3)+
+   geom_ribbon(data = WSCI,
+              aes(ymin = amplitude-ci,
+                  ymax = amplitude+ci,
+                  fill = Frequency,
+                  colour = Frequency),
+              linetype=&quot;dashed&quot;,
+              alpha = 0.3) +
+  guides(fill= &quot;none&quot;)+
+  stat_summary(fun.y = mean,geom = &quot;line&quot;,size = 1)+
+  labs(x = &quot;Time (ms)&quot;,y = expression(paste(&quot;Amplitude (&quot;,mu,&quot;V)&quot;)),colour = &quot;&quot;)+
+  geom_vline(xintercept = 0,linetype = &quot;dashed&quot; )+
+  geom_hline(yintercept = 0,linetype = &quot;dashed&quot;)</code></pre>
+<p><img src="../../../../post/2017-01-10-ERP-Visualization-Part-2_files/figure-html/condSplit-1.svg" width="768" /></p>
+<p>Now we have three subplots, each informative about a particular condition. The mental gymnastics to work out where the differences are are becoming harder, and I find myself relying on the condition means. Couple of points of note - you have a couple of people who look a bit odd in the 160-200 ms time window - where most people are showing negative-going deflections, they aren’t. After 200 ms or so, the data in general seems much more variable. I can tell that from the confidence intervals anyway, and it doesn’t seem to differ much across conditions.</p>
+<p>Since there’s no way to tell which line belongs to which participant, it’s impossible to know if it’s the same participants showing the same patterns across conditions (although I’d say it’s very likely in the early parts of the ERP at least). As usual, what I’m really interested in here are the within-subject differences across conditions.</p>
+</div>
+<div id="difference-waves" class="section level2">
+<h2>Difference waves</h2>
+<p>In the two condition post, life was simple. Two conditions only need a single difference wave. But as the number of conditions increases, the number of pairwise differences increases. For three conditions, you’d need three difference waves (here: BB-HSF, BB-LSF, HSF-LSF). For four conditions, you’d need six difference waves. But of course, you’d start off with an F-test to test whether any of the means differ from each other, and, if they do, we’d then run post-hoc t-tests to check which pairs of means differ. A simple starting point is thus the difference between each condition mean and the <em>grand</em> mean, the mean across all conditions.</p>
+<p>As described in a previous <a href="../blog/2016/10/06/ERP-Vis-Running-Tests">post on running t-tests</a>, we can also add the results of a running ANOVA to our plot. We’ll use <em>afex</em> to run each ANOVA and <em>purrr</em> to run them across each timepoint and collect the results. We’ll stick with uncorrected p values for now, but of course they can be corrected as required. Note that you have to be careful to make sure that you choose the p-values from the right term in the ANOVA. With a one-way ANOVA this is not so tough, but here I’m actually running a 2 by 3 ANOVA, so there are actually three terms (Object, Frequency, and Object by Frequency). For the purposes of this post I’m focussing solely on Frequency. I’ve also included 95% within-subject confidence intervals.</p>
+<pre class="r"><code># Run the ANOVA on each timepoint
+Ftests &lt;- levCatGAall %&gt;%
+ split(.$Time) %&gt;%
+ map(~ aov_ez(&quot;Subject&quot;,&quot;amplitude&quot;,.,within = c(&quot;Object&quot;,&quot;Frequency&quot;))) 
+
+#Extract the p-values and correct them as desired.
+levCatGAall$pval &lt;- p.adjust(map_dbl(Ftests,c(1,6,2)),&quot;none&quot;)
+levCatGAall$crit &lt;- 0+(levCatGAall$pval &lt;= .05)
+levCatGAall$crit[levCatGAall$crit == 0] &lt;- NA
+
+#calculate the grand average ERP across all subjects and conditions
+levCatGAall$GAdiff &lt;- levCatGAall$amplitude-(ave(levCatGAall$amplitude,levCatGAall$Time))
+
+#re-doing the CIs. Note it&#39;s not necessary to recalculate them, as they&#39;re the same - this is just an easy way for me to get them in the right format. It&#39;s not very efficient so feel free to improve it ;)
+runningCIs &lt;- levCatGAall %&gt;%
+  group_by(Frequency,Time,Subject)%&gt;%
+  dplyr::summarise(amplitude = mean(GAdiff))%&gt;%
+  split(.$Time) %&gt;%
+  map(~summarySEwithin(data = .,
+                       measurevar = &quot;amplitude&quot;,
+                       withinvars = c(&quot;Frequency&quot;),
+                       idvar = &quot;Subject&quot;))
+
+WSCI &lt;- map_df(runningCIs,magrittr::extract) %&gt;%
+  mutate(
+    Time = rep(unique(levCatGAall$Time),each =3) #Note, you&#39;ll have to change 3 to match the number of conditions
+    )
+
+#Reinitialize the plot to add the new variables added to levCatGAall
+ERPdiff.plot &lt;- ggplot(levCatGAall,aes(Time,amplitude))+
+  scale_color_brewer(palette = &quot;Dark2&quot;)+
+  scale_fill_brewer(palette = &quot;Dark2&quot;)+
+  theme_minimal()
+ 
+ERPdiff.plot+
+  guides(fill = &quot;none&quot;)+
+  labs(x = &quot;Time (ms)&quot;,
+       y = expression(paste(&quot;Amplitude (&quot;,mu,&quot;V)&quot;)),
+       colour = &quot;&quot;)+
+   geom_ribbon(data = WSCI,
+              aes(ymin = amplitude-ci,
+                  ymax = amplitude+ci,
+                  fill = Frequency,
+                  colour = Frequency),
+              linetype=&quot;dashed&quot;,
+              alpha = 0.3) +
+  stat_summary(fun.y = mean,
+               geom = &quot;line&quot;,
+               size = 1,
+               aes(y = GAdiff,
+                   colour = Frequency)
+               )+
+  geom_line(aes(x = Time,
+                y = crit-3),
+            na.rm = TRUE,
+            size = 2)+
+  geom_vline(xintercept = 0,linetype = &quot;dashed&quot; )+
+  geom_hline(yintercept = 0,linetype = &quot;dashed&quot;)</code></pre>
+<p><img src="../../../../post/2017-01-10-ERP-Visualization-Part-2_files/figure-html/diffPlotGroup-1.svg" width="576" /></p>
+<p>This shows that there is a significant effect of frequency around 40 ms, from around 80 to 360 ms, and from around 370 - 375 ms. Of course, we can’t tell from an F-test alone which means are significantly different from each other at any given time point. But it’s pretty clear that BB images elicit more positive ERPs than HSF and LSF images from around 80 - 300 ms. The CIs also help here - by around 300ms the HSF and BB image ERPs are converging, but LSF is staying more negative. Really we need to do post-hoc tests - I’ll try that out in a follow-up post.</p>
+<p>In theory, we could also add lines for each person’s difference from the grand mean…</p>
+<pre class="r"><code>ERPdiff.plot+
+  guides(fill = &quot;none&quot;)+
+  labs(x = &quot;Time (ms)&quot;, y = expression(paste(&quot;Amplitude (&quot;,mu,&quot;V)&quot;)),colour = &quot;&quot;)+
+  stat_summary(fun.y = mean,geom = &quot;line&quot;,size = 1,aes(y = GAdiff,group = interaction(Subject,Frequency),colour = Frequency),alpha = 0.4)+
+   geom_ribbon(data = WSCI,
+              aes(ymin = amplitude-ci,
+                  ymax = amplitude+ci,
+                  fill = Frequency,
+                  colour = Frequency),
+              linetype=&quot;dashed&quot;,
+              alpha = 0.3)+
+  stat_summary(fun.y = mean,geom = &quot;line&quot;,size = 2,aes(y = GAdiff,colour = Frequency))+
+  geom_vline(xintercept = 0,linetype = &quot;dashed&quot; )+
+  geom_hline(yintercept = 0,linetype = &quot;dashed&quot;)</code></pre>
+<p><img src="../../../../post/2017-01-10-ERP-Visualization-Part-2_files/figure-html/diffPlotIndiv-1.svg" width="672" /></p>
+<p>…but if you can make sense of that, you have better eyesight than I have. Splitting them up by condition helps, but still leaves you with having to perform mental gymnastics to compare across conditions. But coupled with one of the first difference plot, that in itself might not be a huge issue.</p>
+<pre class="r"><code>ERPdiff.plot+
+  guides(fill = &quot;none&quot;)+
+  labs(x = &quot;Time (ms)&quot;, y = expression(paste(&quot;Amplitude (&quot;,mu,&quot;V)&quot;)),colour = &quot;&quot;)+
+  stat_summary(fun.y = mean,geom = &quot;line&quot;,size = 1,aes(y = GAdiff,group = Subject),alpha = 0.3)+
+  stat_summary(fun.y = mean,geom = &quot;line&quot;,size = 2,aes(y = GAdiff))+
+  geom_vline(xintercept = 0,linetype = &quot;dashed&quot; )+
+  geom_hline(yintercept = 0,linetype = &quot;dashed&quot;)+
+  facet_wrap(~Frequency)</code></pre>
+<p><img src="../../../../post/2017-01-10-ERP-Visualization-Part-2_files/figure-html/diffPlotIndiv2-1.svg" width="672" /></p>
+<p>So at a first pass, subtracting the grand average ERP from the condition ERPs seems like a plausible way to show overall differences across three conditions. I’ll post soon on doing pairwise comparisons between those three conditions.</p>
+</div>
+
+
+  
+<div class="prev-next-post pure-g">
+  <div class="pure-u-1-24" style="text-align: left;">
+    
+    <a href="../../../../2016/12/16/erp-visualization-shiny-demo-updated/"><i class="fa fa-chevron-left"></i></a>
+    
+  </div>
+  <div class="pure-u-10-24">
+    
+    <nav class="prev">
+      <a href="../../../../2016/12/16/erp-visualization-shiny-demo-updated/">ERP visualization: Shiny Demo updated</a>
+    </nav>
+    
+  </div>
+  <div class="pure-u-2-24">
+    &nbsp;
+  </div>
+  <div class="pure-u-10-24">
+    
+    <nav class="next">
+      <a href="../../../../2017/02/25/erp-visualization-creating-topographical-scalp-maps-part-1/">ERP Visualization: Creating topographical scalp maps: part 1</a>
+    </nav>
+    
+  </div>
+  <div class="pure-u-1-24" style="text-align: right;">
+    
+    <a href="../../../../2017/02/25/erp-visualization-creating-topographical-scalp-maps-part-1/"><i class="fa fa-chevron-right"></i></a>
+    
+  </div>
+</div>
+
+
+
+  
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+
+(function() {
+    
+    
+    if (window.location.hostname == "localhost")
+        return;
+
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    var disqus_shortname = 'craddmatgithub';
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+</div>
+
+</div>
+</div>
+<script src="../../../../js/ui.js"></script>
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'Your Google Analytics tracking ID', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+
+</body>
+</html>
+

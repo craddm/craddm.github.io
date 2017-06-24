@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  
+  <url>
+    <loc>/2017/06/24/testing-draft-functions/</loc>
+    <lastmod>2017-06-24T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/about/</loc>
+    <lastmod>2017-05-30T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/2017/05/02/maps-of-the-2015-election-results-in-great-britain/</loc>
+    <lastmod>2017-05-02T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/2017/04/19/eeg-processing-with-python-but-in-r/</loc>
+    <lastmod>2017-04-19T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/2017/04/07/eeg-analysis-in-r-what-s-missing/</loc>
+    <lastmod>2017-04-07T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/2017/03/02/creating-topographical-scalp-maps-part-2---colour-maps-and-contour-lines/</loc>
+    <lastmod>2017-03-02T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/2017/02/25/erp-visualization-creating-topographical-scalp-maps-part-1/</loc>
+    <lastmod>2017-02-25T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/2017/01/10/erp-visualization-three-conditions/</loc>
+    <lastmod>2017-01-10T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/2016/12/16/erp-visualization-shiny-demo-updated/</loc>
+    <lastmod>2016-12-16T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/2016/12/07/erp-visualization-basic-shiny-demo/</loc>
+    <lastmod>2016-12-07T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/2016/11/28/erp-visualization-within-subject-confidence-intervals/</loc>
+    <lastmod>2016-11-28T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/2016/10/06/running-statistical-tests/</loc>
+    <lastmod>2016-10-06T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/2016/09/19/comparing-two-erps/</loc>
+    <lastmod>2016-09-19T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/contact/</loc>
+    <lastmod>2014-04-09T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/eeg/</loc>
+    <lastmod>2017-04-19T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/erps/</loc>
+    <lastmod>2017-04-19T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/ggplot2/</loc>
+    <lastmod>2017-05-02T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/politics/</loc>
+    <lastmod>2017-05-02T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/post/</loc>
+    <lastmod>2017-06-24T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/python/</loc>
+    <lastmod>2017-04-19T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/r/</loc>
+    <lastmod>2017-05-02T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/shiny/</loc>
+    <lastmod>2016-12-16T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/statistics/</loc>
+    <lastmod>2017-01-10T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/</loc>
+    <lastmod>2017-04-19T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/</loc>
+    <lastmod>2017-06-24T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/topgraphies/</loc>
+    <lastmod>2017-02-25T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/topics/</loc>
+    <priority>0</priority>
+  </url>
+  
+</urlset>

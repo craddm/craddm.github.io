@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="">
+  <meta name="generator" content="Hugo 0.20.7" />
+
+  <title>ERP Visualization: timepoint-by-timepoint tests &middot; Time-frequency Transform</title>
+
+  
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pure/0.6.2/pure-min.css">
+
+  <!--[if lte IE 8]>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pure/0.6.2/grids-responsive-old-ie-min.css">
+  <![endif]-->
+  <!--[if gt IE 8]><!-->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pure/0.6.2/grids-responsive-min.css">
+  <!--<![endif]-->
+
+  <!--[if lte IE 8]>
+  <link rel="stylesheet" href="../../../../css/side-menu-old-ie.css">
+  <![endif]-->
+  <!--[if gt IE 8]><!-->
+  <link rel="stylesheet" href="../../../../css/side-menu.css">
+  <!--<![endif]-->
+
+  <link rel="stylesheet" href="../../../../css/blackburn.css">
+
+  
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+  
+  <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet" type="text/css">
+
+  
+  
+
+  
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.11.0/styles/androidstudio.min.css">
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.11.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+  
+
+  <link rel="shortcut icon" href="../../../../img/favicon.ico" type="image/x-icon" />
+
+  
+    <link rel="stylesheet" href="../../../../css/custom.css">
+  
+  
+
+</head>
+
+
+<body>
+<div id="layout">
+
+  
+<a href="#menu" id="menuLink" class="menu-link">
+  
+  <span></span>
+</a>
+<div id="menu">
+
+  
+  <a class="pure-menu-heading brand" href="../../../../">The TFT</a>
+
+
+  <div class="pure-menu">
+    <ul class="pure-menu-list">
+      
+      
+        <li class="pure-menu-item">
+          <a class="pure-menu-link" href="../../../../"><i class='fa fa-home fa-fw'></i>Home</a>
+      
+        </li>
+      
+      
+        <li class="pure-menu-item">
+          <a class="pure-menu-link" href="../../../../post/"><i class='fa fa-list fa-fw'></i>Posts</a>
+      
+        </li>
+      
+      
+        <li class="pure-menu-item">
+          <a class="pure-menu-link" href="../../../../about/"><i class='fa fa-user fa-fw'></i>About</a>
+      
+        </li>
+      
+    </ul>
+  </div>
+
+  <div class="pure-menu social">
+  <ul class="pure-menu-list">
+
+    
+
+    
+
+    
+    <li class="pure-menu-item">
+      <a class="pure-menu-link" href="https://twitter.com/Matt_Craddock" target="_blank"><i class="fa fa-twitter-square fa-fw"></i>Twitter</a>
+    </li>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <li class="pure-menu-item">
+      <a class="pure-menu-link" href="https://github.com/craddm" target="_blank"><i class="fa fa-github-square fa-fw"></i>GitHub</a>
+    </li>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+  </ul>
+</div>
+
+
+  <div>
+  <div class="small-print">
+    <small>&copy; 2016-2017. All rights reserved.</small>
+  </div>
+  <div class="small-print">
+    <small>Built with&nbsp;<a href="https://gohugo.io/" target="_blank">Hugo</a></small>
+    <small>Theme&nbsp;<a href="https://github.com/yoshiharuyamashita/blackburn" target="_blank">Blackburn</a></small>
+  </div>
+</div>
+
+</div>
+
+
+  <div id="main">
+
+
+<div class="header">
+  <h1>ERP Visualization: timepoint-by-timepoint tests</h1>
+  <h2></h2>
+</div>
+<div class="content">
+
+  <div class="post-meta">
+
+  <div>
+    <i class="fa fa-calendar fa-fw"></i>
+    <time>06 Oct 2016</time>
+  </div>
+
+  
+
+  
+
+  
+  
+  
+  <div>
+    <i class="fa fa-tags fa-fw"></i>
+    
+      <a class="post-taxonomy-tag" href="../../../../tags/eeg">EEG</a>&nbsp;&#47;
+    
+      <a class="post-taxonomy-tag" href="../../../../tags/erps">ERPs</a>&nbsp;&#47;
+    
+      <a class="post-taxonomy-tag" href="../../../../tags/statistics">statistics</a>&nbsp;&#47;
+    
+      <a class="post-taxonomy-tag" href="../../../../tags/r">R</a>&nbsp;&#47;
+    
+      <a class="post-taxonomy-tag" href="../../../../tags/ggplot2">ggplot2</a>
+    
+  </div>
+  
+  
+
+</div>
+
+  <div id="running-statistical-tests-using-purrr" class="section level2">
+<h2>Running statistical tests using “purrr”</h2>
+<p>Something which puzzled me for a while was how to efficiently perform running (i.e. timepoint-by-timepoint) statistical tests on ERP/EEG in R. That was solved for me when I discovered the <a href="https://cran.r-project.org/web/packages/purrr/index.html"><strong>purrr</strong></a> package, another of <a href="https://cran.r-project.org/web/packages/ggplot2/index.html"><strong>ggplot2</strong></a> author Hadley Wickham’s projects. Using the <em>split</em> command, you can easily split a data frame into multiple frames by one of its variables. In the EEG/ERP case, that means I can easily split the data into separate data frames for each timepoint and run my test of choice on each timepoint independently using the <em>map</em> command. Finally, <em>map_dbl</em> lets me extract the relevant pvalues from each test into a single vector.</p>
+<p>I’ll demonstrate this using the data from my first post to run t-tests at each timepoint. First of all, let’s run the t-tests.</p>
+<pre class="r"><code>library(dplyr)
+library(purrr)
+
+runningT &lt;- levCatGA %&gt;%
+  split(.$Time) %&gt;%
+  map(~t.test(amplitude ~ condition, paired = TRUE, data = .))</code></pre>
+<p>I use %&gt;% to pipe the results of each line of code down into the next line of code, so that I don’t have to use intermediate variables to store the results of each line.</p>
+<p>I now have a list, <strong>runningT</strong>, containing the t-test result for each timepoint. Each of these tests can be accessed independently. Here is the result for 0 ms, for example:</p>
+<pre class="r"><code>runningT$`0`</code></pre>
+<pre><code>## 
+##  Paired t-test
+## 
+## data:  amplitude by condition
+## t = 0.35813, df = 14, p-value = 0.7256
+## alternative hypothesis: true difference in means is not equal to 0
+## 95 percent confidence interval:
+##  -0.2085599  0.2921698
+## sample estimates:
+## mean of the differences 
+##              0.04180494</code></pre>
+<p>Let’s now extract the p-value for each test. For each t-test result, the p-value is stored in a list-element conveniently labeled “p.value”, so it’s very easy to extract. If you wanted the t-statistic, you could use “statistic” instead. The exact terms you need to use will vary according to which test you run. Most likely you’ll use a similar method to perform running F-tests. I’ve found these a bit harder to get the right values from, but more on them later.</p>
+<p>First up, I’ll create a data frame with columns for time and for p-values, then plot them on their own.</p>
+<pre class="r"><code>pvals &lt;- data.frame(Time = unique(levCatGA$Time), 
+                    p.value = map_dbl(runningT,&quot;p.value&quot;))
+ggplot(pvals, aes(x = Time, y = p.value)) +
+  geom_point()</code></pre>
+<p><img src="../../../../post/2016-10-06-ERP-Vis-Running-Tests_files/figure-html/getPvals-1.svg" width="384" /></p>
+<p>Typically, people add a separate line to ERP plots indicating timepoints which were significant at the pre-specified alpha (so p &lt; .05, usually). Here’s how to do that:</p>
+<pre class="r"><code>pvals$crit &lt;- 0 + (pvals$p.value &lt;= .05)
+pvals$crit[pvals$crit == 0] &lt;- NA
+
+levCat.plot +
+  stat_summary(fun.data = mean_cl_boot, geom = &quot;ribbon&quot;, 
+               size = 1, aes(fill = condition), alpha = 0.3) +
+  guides(fill = &quot;none&quot;) +
+  stat_summary(fun.y = mean, geom = &quot;line&quot;, size = 1,
+               aes(colour = condition)) +
+  labs(x = &quot;Time (ms)&quot;,
+       y = expression(paste(&quot;Amplitude (&quot;, mu,&quot;V)&quot;)), colour = &quot;&quot;)+
+  geom_line(data = pvals, aes(x = Time, y = crit-3),
+            na.rm = TRUE, size = 2)+
+  geom_vline(xintercept = 0, linetype = &quot;dashed&quot;) +
+  geom_hline(yintercept = 0, linetype = &quot;dashed&quot;)</code></pre>
+<p><img src="../../../../post/2016-10-06-ERP-Vis-Running-Tests_files/figure-html/addSig-1.svg" width="576" /></p>
+<p>First I thresholded the p values at p = .05, replacing non-significant values with <em>NA</em>s and significant values with 1s. I then added a geom_line to the plot. Since ggplot is plotting the line using the same axis as for the ERPs, I simply offset them by 3 so that the significance line is plotted well below the actual ERPS.</p>
+<p>Let’s add the significance line to a plot that includes the difference wave:</p>
+<pre class="r"><code>levCat.plot +
+  guides(fill = &quot;none&quot;) +
+  labs(x = &quot;Time (ms)&quot;,
+       y = expression(paste(&quot;Amplitude (&quot;,mu,&quot;V)&quot;)), colour = &quot;&quot;) +
+  stat_summary(fun.data = mean_cl_boot, geom = &quot;ribbon&quot;,
+               alpha = 0.3, aes(fill = condition)) +
+  stat_summary(fun.y = mean, geom = &quot;line&quot;, size = 1,
+               aes(colour = condition)) +
+  stat_summary(data = levCatDiff, fun.y=mean, geom = &quot;line&quot;, 
+               aes(colour = condition)) +
+  stat_summary(data = levCatDiff, fun.data = mean_cl_boot, 
+               geom = &quot;ribbon&quot;, alpha = 0.3, aes(fill = condition)) +
+  geom_line(data = pvals, aes(x = Time, y = crit-3),
+            na.rm = TRUE, size = 2) +
+  geom_vline(xintercept = 0, linetype = &quot;dashed&quot;) +
+  geom_hline(yintercept = 0, linetype = &quot;dashed&quot;)</code></pre>
+<p><img src="../../../../post/2016-10-06-ERP-Vis-Running-Tests_files/figure-html/diffPlot-1.svg" width="672" /></p>
+<p>Notice how the significance line more or less corresponds to the time-points where the CIs around the difference wave no longer overlap zero. It’s clear that there are significant differences from around 80-130 ms and from 170-210 ms.</p>
+<p>Of course, these p-values are not corrected for multiple comparisons, which is a bit of an issue when there are 256 t-tests. Fortunately, it’s easy to correct them in a variety of ways using the the p.adjust command.</p>
+<pre class="r"><code>pvals$critBon &lt;- 0+ (p.adjust(pvals$p.value,&quot;bonferroni&quot;) &lt;= .05)
+pvals$critBon[pvals$critBon == 0] &lt;- NA
+
+pvals$critHolm &lt;- 0 + (p.adjust(pvals$p.value, &quot;holm&quot;) &lt;= .05)
+pvals$critHolm[pvals$critHolm == 0] &lt;- NA
+
+pvals$critFDR &lt;- 0+(p.adjust(pvals$p.value, &quot;fdr&quot;) &lt;= .05)
+pvals$critFDR[pvals$critFDR == 0] &lt;- NA
+
+levCat.plot +
+  guides(fill = &quot;none&quot;) +
+  labs(x = &quot;Time (ms)&quot;,
+       y = expression(paste(&quot;Amplitude (&quot;,mu,&quot;V)&quot;)), colour = &quot;&quot;) +
+  stat_summary(data = levCatDiff, fun.y=mean, geom = &quot;line&quot;, 
+               aes(colour = condition)) +
+  stat_summary(data = levCatDiff, fun.data = mean_cl_boot,
+               geom = &quot;ribbon&quot;, alpha = 0.3, aes(fill = condition)) +
+  geom_line(data = pvals, aes(x = Time, y = crit-3), na.rm = TRUE,
+            size = 2)+
+  annotate(&quot;text&quot;, x =300, y = -2, label = &quot;Uncorrected&quot;) +
+  geom_line(data = pvals, aes(x = Time, y = critBon - 3.3),
+            na.rm = TRUE, size = 2, colour = &quot;darkgreen&quot;) +
+  annotate(&quot;text&quot;, x =300, y = -2.3, label = &quot;Bonferroni&quot;,
+           colour = &quot;darkgreen&quot;) +
+  geom_line(data = pvals, aes(x = Time, y = critHolm-3.6),
+            na.rm = TRUE, size = 2, colour = &quot;blue&quot;) +
+  annotate(&quot;text&quot;, x =300, y = -2.6, label = &quot;Bonferroni-Holm&quot;, 
+           colour = &quot;blue&quot;)+
+  geom_line(data = pvals, aes(x = Time, y = critFDR-3.9), 
+            na.rm = TRUE, size = 2, colour = &quot;darkred&quot;) +
+  annotate(&quot;text&quot;, x =300, y = -2.9, label = &quot;FDR&quot;,
+           colour = &quot;darkred&quot;)+
+  geom_vline(xintercept = 0, linetype = &quot;dashed&quot; )+
+  geom_hline(yintercept = 0, linetype = &quot;dashed&quot;)</code></pre>
+<p><img src="../../../../post/2016-10-06-ERP-Vis-Running-Tests_files/figure-html/diffPlotGroup-1.svg" width="672" /></p>
+<p>With either Bonferroni or Bonferroni-Holm correction, only the effect in the P1 stays significant, while the later effect is no longer significant. FDR correction keeps some of both effects significant. As you can see, the 95% CIs reflect the uncorrected p values. They could, in theory, also be corrected to reflect multiple comparisons, but I’ve never seen this done. Just make sure to be clear that they are uncorrected if using them for inference.</p>
+<p>So to sum up, it’s pretty easy with <strong>purrr</strong> to do running, timepoint-by-timepoint statistical tests. The trickiest part can be finding out how to extract the relevant values from the output of those tests. Here I’ve used the built-in R command <em>t.test</em> to run the statistics. You can easily extend this approach to ANOVAs, which are another very common statistical test you’d see people performing when there are more than two conditions. I’ll be doing some F-tests in a later post.</p>
+</div>
+
+
+  
+<div class="prev-next-post pure-g">
+  <div class="pure-u-1-24" style="text-align: left;">
+    
+    <a href="../../../../2016/09/19/comparing-two-erps/"><i class="fa fa-chevron-left"></i></a>
+    
+  </div>
+  <div class="pure-u-10-24">
+    
+    <nav class="prev">
+      <a href="../../../../2016/09/19/comparing-two-erps/">ERP Visualization Part 1: Comparing two conditions</a>
+    </nav>
+    
+  </div>
+  <div class="pure-u-2-24">
+    &nbsp;
+  </div>
+  <div class="pure-u-10-24">
+    
+    <nav class="next">
+      <a href="../../../../2016/11/28/erp-visualization-within-subject-confidence-intervals/">ERP Visualization: Within-subject confidence intervals</a>
+    </nav>
+    
+  </div>
+  <div class="pure-u-1-24" style="text-align: right;">
+    
+    <a href="../../../../2016/11/28/erp-visualization-within-subject-confidence-intervals/"><i class="fa fa-chevron-right"></i></a>
+    
+  </div>
+</div>
+
+
+
+  
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+
+(function() {
+    
+    
+    if (window.location.hostname == "localhost")
+        return;
+
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    var disqus_shortname = 'craddmatgithub';
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+</div>
+
+</div>
+</div>
+<script src="../../../../js/ui.js"></script>
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'Your Google Analytics tracking ID', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+
+</body>
+</html>
+

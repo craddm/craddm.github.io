@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Python on Time-frequency Transform</title>
+    <link>/tags/python/</link>
+    <description>Recent content in Python on Time-frequency Transform</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-gb</language>
+    <copyright>&amp;copy; 2016-2017. All rights reserved.</copyright>
+    <lastBuildDate>Wed, 19 Apr 2017 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="/tags/python/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>EEG processing with Python, but in R?</title>
+      <link>/2017/04/19/eeg-processing-with-python-but-in-r/</link>
+      <pubDate>Wed, 19 Apr 2017 00:00:00 +0000</pubDate>
+      
+      <guid>/2017/04/19/eeg-processing-with-python-but-in-r/</guid>
+      <description>As mentioned in my last post, an issue doing EEG analysis in R at the moment is that there’s a distinct lack of tools in R for a lot of the typical processing steps. In the past I’ve done a lot of processing in Matlab (specifically with EEGLAB and Fieldtrip) and shifted things over to R for statistics. But all is not lost. For example, with the following code, I can run a bunch of preprocessing, including automatic artefact rejection, and have nice ERPs in R in the blink of an eye!</description>
+    </item>
+    
+  </channel>
+</rss>

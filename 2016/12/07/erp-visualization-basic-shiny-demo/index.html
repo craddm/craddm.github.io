@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="">
+  <meta name="generator" content="Hugo 0.20.7" />
+
+  <title>ERP visualization: Basic Shiny Demo &middot; Time-frequency Transform</title>
+
+  
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pure/0.6.2/pure-min.css">
+
+  <!--[if lte IE 8]>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pure/0.6.2/grids-responsive-old-ie-min.css">
+  <![endif]-->
+  <!--[if gt IE 8]><!-->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pure/0.6.2/grids-responsive-min.css">
+  <!--<![endif]-->
+
+  <!--[if lte IE 8]>
+  <link rel="stylesheet" href="../../../../css/side-menu-old-ie.css">
+  <![endif]-->
+  <!--[if gt IE 8]><!-->
+  <link rel="stylesheet" href="../../../../css/side-menu.css">
+  <!--<![endif]-->
+
+  <link rel="stylesheet" href="../../../../css/blackburn.css">
+
+  
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+  
+  <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet" type="text/css">
+
+  
+  
+
+  
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.11.0/styles/androidstudio.min.css">
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.11.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+  
+
+  <link rel="shortcut icon" href="../../../../img/favicon.ico" type="image/x-icon" />
+
+  
+    <link rel="stylesheet" href="../../../../css/custom.css">
+  
+  
+
+</head>
+
+
+<body>
+<div id="layout">
+
+  
+<a href="#menu" id="menuLink" class="menu-link">
+  
+  <span></span>
+</a>
+<div id="menu">
+
+  
+  <a class="pure-menu-heading brand" href="../../../../">The TFT</a>
+
+
+  <div class="pure-menu">
+    <ul class="pure-menu-list">
+      
+      
+        <li class="pure-menu-item">
+          <a class="pure-menu-link" href="../../../../"><i class='fa fa-home fa-fw'></i>Home</a>
+      
+        </li>
+      
+      
+        <li class="pure-menu-item">
+          <a class="pure-menu-link" href="../../../../post/"><i class='fa fa-list fa-fw'></i>Posts</a>
+      
+        </li>
+      
+      
+        <li class="pure-menu-item">
+          <a class="pure-menu-link" href="../../../../about/"><i class='fa fa-user fa-fw'></i>About</a>
+      
+        </li>
+      
+    </ul>
+  </div>
+
+  <div class="pure-menu social">
+  <ul class="pure-menu-list">
+
+    
+
+    
+
+    
+    <li class="pure-menu-item">
+      <a class="pure-menu-link" href="https://twitter.com/Matt_Craddock" target="_blank"><i class="fa fa-twitter-square fa-fw"></i>Twitter</a>
+    </li>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <li class="pure-menu-item">
+      <a class="pure-menu-link" href="https://github.com/craddm" target="_blank"><i class="fa fa-github-square fa-fw"></i>GitHub</a>
+    </li>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+  </ul>
+</div>
+
+
+  <div>
+  <div class="small-print">
+    <small>&copy; 2016-2017. All rights reserved.</small>
+  </div>
+  <div class="small-print">
+    <small>Built with&nbsp;<a href="https://gohugo.io/" target="_blank">Hugo</a></small>
+    <small>Theme&nbsp;<a href="https://github.com/yoshiharuyamashita/blackburn" target="_blank">Blackburn</a></small>
+  </div>
+</div>
+
+</div>
+
+
+  <div id="main">
+
+
+<div class="header">
+  <h1>ERP visualization: Basic Shiny Demo</h1>
+  <h2></h2>
+</div>
+<div class="content">
+
+  <div class="post-meta">
+
+  <div>
+    <i class="fa fa-calendar fa-fw"></i>
+    <time>07 Dec 2016</time>
+  </div>
+
+  
+
+  
+
+  
+  
+  
+  <div>
+    <i class="fa fa-tags fa-fw"></i>
+    
+      <a class="post-taxonomy-tag" href="../../../../tags/eeg">EEG</a>&nbsp;&#47;
+    
+      <a class="post-taxonomy-tag" href="../../../../tags/erps">ERPs</a>&nbsp;&#47;
+    
+      <a class="post-taxonomy-tag" href="../../../../tags/statistics">statistics</a>&nbsp;&#47;
+    
+      <a class="post-taxonomy-tag" href="../../../../tags/r">R</a>&nbsp;&#47;
+    
+      <a class="post-taxonomy-tag" href="../../../../tags/ggplot2">ggplot2</a>&nbsp;&#47;
+    
+      <a class="post-taxonomy-tag" href="../../../../tags/shiny">shiny</a>
+    
+  </div>
+  
+  
+
+</div>
+
+  <div id="shiny-app" class="section level2">
+<h2>Shiny app</h2>
+<p>In an unusual fit of enthusiasm, I decided to have to go at writing a little app in <a href="http://www.shinyapps.io/">Shiny</a>, a simple programming framework to make web-based apps using R. So, as usual, all programmed using <a href="https://www.rstudio.com/">RStudio</a>, the devs who also make Shiny and various fantastic R packages such as <em>dplyr</em> and <em>ggplot2</em>.</p>
+<p>It turned out to be pretty simple. I’m planning to add various additional functions as I get time to work on my blog posts, like allowing people to use their own data, for example. I’ve uploaded the current app to Shinyapps.io, so you can have a play with it by <a href="https://craddm.shinyapps.io/ERPdemo/">clicking here</a>.</p>
+<p>All the code is available over on my <a href="https://github.com/craddm/ERPdemo">Github page</a>, as is the R Markdown code for the <a href="https://github.com/craddm/craddm.github.io">whole blog</a>. If you want to try using the app with your own data, you should be able to do it by downloading the code yourself and running it in R. You’d need to modify the early lines where it loads the data -</p>
+<pre class="r"><code>levCatGA &lt;- read_csv(&quot;data/levCatObjNon.csv&quot;,
+                     col_names = c(&quot;Object&quot;, &quot;Non-Object&quot;, &quot;Time&quot;, &quot;Subject&quot;)) %&gt;%
+  mutate(Difference = Object - `Non-Object`) %&gt;%
+  gather(condition, amplitude,-Time,-Subject) %&gt;%
+  mutate(effectType = factor(if_else(condition == &quot;Difference&quot;, &quot;Difference&quot;, &quot;Main&quot;)))</code></pre>
+<p>Just change the filename, the instances of the word “Object” and “Non-Object” to whatever labels you want, and you’ll be good to go. The initial file format here is that the first two columns are amplitude values for each of two conditions, a numeric column indicating which timepoint each row is from, and a numeric column indicating which Subject the row is from. The order of columns in the file doesn’t really matter, though - just make sure you give them the right names when you import them.</p>
+<p>I’m sure the code can be made much more efficient, but this was pretty easy to put together with a little practice!</p>
+</div>
+
+
+  
+<div class="prev-next-post pure-g">
+  <div class="pure-u-1-24" style="text-align: left;">
+    
+    <a href="../../../../2016/11/28/erp-visualization-within-subject-confidence-intervals/"><i class="fa fa-chevron-left"></i></a>
+    
+  </div>
+  <div class="pure-u-10-24">
+    
+    <nav class="prev">
+      <a href="../../../../2016/11/28/erp-visualization-within-subject-confidence-intervals/">ERP Visualization: Within-subject confidence intervals</a>
+    </nav>
+    
+  </div>
+  <div class="pure-u-2-24">
+    &nbsp;
+  </div>
+  <div class="pure-u-10-24">
+    
+    <nav class="next">
+      <a href="../../../../2016/12/16/erp-visualization-shiny-demo-updated/">ERP visualization: Shiny Demo updated</a>
+    </nav>
+    
+  </div>
+  <div class="pure-u-1-24" style="text-align: right;">
+    
+    <a href="../../../../2016/12/16/erp-visualization-shiny-demo-updated/"><i class="fa fa-chevron-right"></i></a>
+    
+  </div>
+</div>
+
+
+
+  
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+
+(function() {
+    
+    
+    if (window.location.hostname == "localhost")
+        return;
+
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    var disqus_shortname = 'craddmatgithub';
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+</div>
+
+</div>
+</div>
+<script src="../../../../js/ui.js"></script>
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'Your Google Analytics tracking ID', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+
+</body>
+</html>
+

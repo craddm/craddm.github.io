@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Topgraphies on Time-frequency Transform</title>
+    <link>/tags/topgraphies/</link>
+    <description>Recent content in Topgraphies on Time-frequency Transform</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-gb</language>
+    <copyright>&amp;copy; 2016-2017. All rights reserved.</copyright>
+    <lastBuildDate>Sat, 25 Feb 2017 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="/tags/topgraphies/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>ERP Visualization: Creating topographical scalp maps: part 1</title>
+      <link>/2017/02/25/erp-visualization-creating-topographical-scalp-maps-part-1/</link>
+      <pubDate>Sat, 25 Feb 2017 00:00:00 +0000</pubDate>
+      
+      <guid>/2017/02/25/erp-visualization-creating-topographical-scalp-maps-part-1/</guid>
+      <description>As well as ERPs or time-frequency plots from individual channels, it’s always useful to see topographical maps of our data. It’s a nice way to see what’s going on across the whole head, showing us whether effects are broadly or narrowly distributed across the whole scalp. So now I’m going to show you how to do topographical plots in R.
+I want to first of all thank alexforrance and Harold Cavendish over on Stack Overflow for being the source of much of the code I’ve adapted here.</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="">
+  <meta name="generator" content="Hugo 0.20.7" />
+
+  <title>EEG analysis in R: What &#39;s missing? &middot; Time-frequency Transform</title>
+
+  
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pure/0.6.2/pure-min.css">
+
+  <!--[if lte IE 8]>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pure/0.6.2/grids-responsive-old-ie-min.css">
+  <![endif]-->
+  <!--[if gt IE 8]><!-->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pure/0.6.2/grids-responsive-min.css">
+  <!--<![endif]-->
+
+  <!--[if lte IE 8]>
+  <link rel="stylesheet" href="../../../../css/side-menu-old-ie.css">
+  <![endif]-->
+  <!--[if gt IE 8]><!-->
+  <link rel="stylesheet" href="../../../../css/side-menu.css">
+  <!--<![endif]-->
+
+  <link rel="stylesheet" href="../../../../css/blackburn.css">
+
+  
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+  
+  <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet" type="text/css">
+
+  
+  
+
+  
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.11.0/styles/androidstudio.min.css">
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.11.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+  
+
+  <link rel="shortcut icon" href="../../../../img/favicon.ico" type="image/x-icon" />
+
+  
+    <link rel="stylesheet" href="../../../../css/custom.css">
+  
+  
+
+</head>
+
+
+<body>
+<div id="layout">
+
+  
+<a href="#menu" id="menuLink" class="menu-link">
+  
+  <span></span>
+</a>
+<div id="menu">
+
+  
+  <a class="pure-menu-heading brand" href="../../../../">The TFT</a>
+
+
+  <div class="pure-menu">
+    <ul class="pure-menu-list">
+      
+      
+        <li class="pure-menu-item">
+          <a class="pure-menu-link" href="../../../../"><i class='fa fa-home fa-fw'></i>Home</a>
+      
+        </li>
+      
+      
+        <li class="pure-menu-item">
+          <a class="pure-menu-link" href="../../../../post/"><i class='fa fa-list fa-fw'></i>Posts</a>
+      
+        </li>
+      
+      
+        <li class="pure-menu-item">
+          <a class="pure-menu-link" href="../../../../about/"><i class='fa fa-user fa-fw'></i>About</a>
+      
+        </li>
+      
+    </ul>
+  </div>
+
+  <div class="pure-menu social">
+  <ul class="pure-menu-list">
+
+    
+
+    
+
+    
+    <li class="pure-menu-item">
+      <a class="pure-menu-link" href="https://twitter.com/Matt_Craddock" target="_blank"><i class="fa fa-twitter-square fa-fw"></i>Twitter</a>
+    </li>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <li class="pure-menu-item">
+      <a class="pure-menu-link" href="https://github.com/craddm" target="_blank"><i class="fa fa-github-square fa-fw"></i>GitHub</a>
+    </li>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+  </ul>
+</div>
+
+
+  <div>
+  <div class="small-print">
+    <small>&copy; 2016-2017. All rights reserved.</small>
+  </div>
+  <div class="small-print">
+    <small>Built with&nbsp;<a href="https://gohugo.io/" target="_blank">Hugo</a></small>
+    <small>Theme&nbsp;<a href="https://github.com/yoshiharuyamashita/blackburn" target="_blank">Blackburn</a></small>
+  </div>
+</div>
+
+</div>
+
+
+  <div id="main">
+
+
+<div class="header">
+  <h1>EEG analysis in R: What &#39;s missing?</h1>
+  <h2></h2>
+</div>
+<div class="content">
+
+  <div class="post-meta">
+
+  <div>
+    <i class="fa fa-calendar fa-fw"></i>
+    <time>07 Apr 2017</time>
+  </div>
+
+  
+
+  
+
+  
+  
+  
+  <div>
+    <i class="fa fa-tags fa-fw"></i>
+    
+      <a class="post-taxonomy-tag" href="../../../../tags/eeg">EEG</a>&nbsp;&#47;
+    
+      <a class="post-taxonomy-tag" href="../../../../tags/r">R</a>
+    
+  </div>
+  
+  
+
+</div>
+
+  <p>An issue doing EEG analysis in R at the moment is that the tools just don’t exist to do a lot of the typical processing steps. It’s an extraordinarily complicated thing to produce working packages that cover even a few of the possible ways to analyse EEG data. The makers of tools like <a href="https://sccn.ucsd.edu/eeglab/">EEGLAB</a>, <a href="http://www.fieldtriptoolbox.org/">Fieldtrip</a>, and <a href="http://martinos.org/mne/stable/index.html">MNE</a> have been doing it a long time, and not on their own. Essentially, there just isn’t a big community of EEG R users to develop and support dedicated packages at the moment.</p>
+<p>This is a shame, as there are a host of statistical tools available in R that are extremely useful. For example, <a href="https://cran.r-project.org/web/packages/lme4/index.html">lme4</a> is a great package for running mixed-effects models. <a href="https://cran.r-project.org/web/packages/brms/index.html">Brms</a> is a great package for running all kinds of Bayesian models - I’ve been using it to run generalized linear mixed models with cumulative logit link functions. Some of the things offered in R aren’t available in other common packages or software, or are only available if you have the right software versions (here’s looking at you, Matlab).</p>
+<p>So what to do?</p>
+<p>There are a few fledgling packages around that implement bits and pieces, but nothing that takes you all the way from your raw data to nicely formatted output.</p>
+<p>Here’s a list of existing packages that I’ve found:</p>
+<ul>
+<li><a href="https://cran.r-project.org/web/packages/eegkit/index.html">eegkit</a>
+<ul>
+<li>No processing or statistics</li>
+<li>Basic plotting tools - timecourses, uninterpolated topographies</li>
+<li>Not updated since 2015</li>
+</ul></li>
+<li><a href="https://github.com/tdeenes/eegR">eegR</a>
+<ul>
+<li>Github release, not available through CRAN</li>
+<li>Not updated since June 2016</li>
+<li>Data import from ASCII, Brain Voyager</li>
+<li>Permutation testing with ANOVA framework, including Threshold Free Cluster Enhancement</li>
+<li>closest to a full featured package for ERP analysis</li>
+<li>Very sparse documentation</li>
+</ul></li>
+<li><a href="https://cran.r-project.org/web/packages/erpR/index.html">erpR</a>
+<ul>
+<li>Not updated for a long time, CRAN version is also not the most up-to-date</li>
+<li>Basic plotting functions</li>
+</ul></li>
+<li><a href="https://erpinr.org/">ERP</a>
+<ul>
+<li>Import from Excel (…) possible, otherwise use standard R import tools for text</li>
+<li>Basic ERP plotting</li>
+<li>Limited statistical testing of two conditions</li>
+</ul></li>
+</ul>
+<p>Here are some of the features completely missing from these packages: * Import from raw files produced by EEG systems (e.g. Biosemi BDF, Neuroscan CNT) * (Time-)frequency analysis * Source-analysis * General data-preprocessing (e.g., artefact correction, filtering, epoching)</p>
+<p>I’m not writing this to critique the authors of these various packages, as they’re up against mature, stable and continuously developed competition in other programming environments.</p>
+<p>Some of these features are implemented in other packages that don’t necessarily have anything to do with EEG. For example, R is perfecly capable of performing FFTs for frequency analysis. There is an EDF/BDF reader package (edfReader), but its performance is poor - it took over 3 minutes for it to load a <em>single block</em> of data from one participant from one of my experiments, whereas tools in other languages can load the same file in a few seconds.</p>
+<p>Currently there is no way to do the full pipeline in R itself, so you’ll have to do at least some work in your other weapon of choice i.e. Python, BrainAnalyzer, or Matlab. Over the last few years I’ve used the <a href="https://sccn.ucsd.edu/eeglab/">EEGLAB</a> and <a href="http://www.fieldtriptoolbox.org/">Fieldtrip</a> packages in Matlab. They’re fantastic in a lot of ways, but for some things I find them cumbersome. And getting decent figures out of Matlab drives me up the wall at the best of times. Often I’ll transfer things over to R to do statistics - excepting special cases such as using non-parametric cluster-based permutation tests from Fieldtrip.</p>
+<p>But the biggest impediment to using R for EEG analysis is simply getting the data into R in a sensible format in the first place. Obviously it can read normal text files, so .csv or tab-delimited text works. And there are packages for reading Matlab .mat files, too, which helps a little but is still painful. I’ve been experimenting lately with MNE, a comprehensive Python package for running (M)EEG analyses. I’m well aware that many of the things I am trying to do in R have existing tools in Python, some built into MNE, some not. But at the same time, I’m more familiar with R and find a lot of things just a lot easier to do; I think some functionality is also currently unavailable or not as well-developed in Python. So in an upcoming post, I’ll be looking at how to integrate Python into my R workflow. It turned out to be easier and more fun than I expected.</p>
+
+
+  
+<div class="prev-next-post pure-g">
+  <div class="pure-u-1-24" style="text-align: left;">
+    
+    <a href="../../../../2017/03/02/creating-topographical-scalp-maps-part-2---colour-maps-and-contour-lines/"><i class="fa fa-chevron-left"></i></a>
+    
+  </div>
+  <div class="pure-u-10-24">
+    
+    <nav class="prev">
+      <a href="../../../../2017/03/02/creating-topographical-scalp-maps-part-2---colour-maps-and-contour-lines/">Creating topographical scalp maps: part 2 - colour maps and contour lines</a>
+    </nav>
+    
+  </div>
+  <div class="pure-u-2-24">
+    &nbsp;
+  </div>
+  <div class="pure-u-10-24">
+    
+    <nav class="next">
+      <a href="../../../../2017/04/19/eeg-processing-with-python-but-in-r/">EEG processing with Python, but in R?</a>
+    </nav>
+    
+  </div>
+  <div class="pure-u-1-24" style="text-align: right;">
+    
+    <a href="../../../../2017/04/19/eeg-processing-with-python-but-in-r/"><i class="fa fa-chevron-right"></i></a>
+    
+  </div>
+</div>
+
+
+
+  
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+
+(function() {
+    
+    
+    if (window.location.hostname == "localhost")
+        return;
+
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    var disqus_shortname = 'craddmatgithub';
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+</div>
+
+</div>
+</div>
+<script src="../../../../js/ui.js"></script>
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'Your Google Analytics tracking ID', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+
+</body>
+</html>
+

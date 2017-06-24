@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="">
+  <meta name="generator" content="Hugo 0.20.7" />
+
+  <title>EEG processing with Python, but in R? &middot; Time-frequency Transform</title>
+
+  
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pure/0.6.2/pure-min.css">
+
+  <!--[if lte IE 8]>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pure/0.6.2/grids-responsive-old-ie-min.css">
+  <![endif]-->
+  <!--[if gt IE 8]><!-->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pure/0.6.2/grids-responsive-min.css">
+  <!--<![endif]-->
+
+  <!--[if lte IE 8]>
+  <link rel="stylesheet" href="../../../../css/side-menu-old-ie.css">
+  <![endif]-->
+  <!--[if gt IE 8]><!-->
+  <link rel="stylesheet" href="../../../../css/side-menu.css">
+  <!--<![endif]-->
+
+  <link rel="stylesheet" href="../../../../css/blackburn.css">
+
+  
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+  
+  <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet" type="text/css">
+
+  
+  
+
+  
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.11.0/styles/androidstudio.min.css">
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.11.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+  
+
+  <link rel="shortcut icon" href="../../../../img/favicon.ico" type="image/x-icon" />
+
+  
+    <link rel="stylesheet" href="../../../../css/custom.css">
+  
+  
+
+</head>
+
+
+<body>
+<div id="layout">
+
+  
+<a href="#menu" id="menuLink" class="menu-link">
+  
+  <span></span>
+</a>
+<div id="menu">
+
+  
+  <a class="pure-menu-heading brand" href="../../../../">The TFT</a>
+
+
+  <div class="pure-menu">
+    <ul class="pure-menu-list">
+      
+      
+        <li class="pure-menu-item">
+          <a class="pure-menu-link" href="../../../../"><i class='fa fa-home fa-fw'></i>Home</a>
+      
+        </li>
+      
+      
+        <li class="pure-menu-item">
+          <a class="pure-menu-link" href="../../../../post/"><i class='fa fa-list fa-fw'></i>Posts</a>
+      
+        </li>
+      
+      
+        <li class="pure-menu-item">
+          <a class="pure-menu-link" href="../../../../about/"><i class='fa fa-user fa-fw'></i>About</a>
+      
+        </li>
+      
+    </ul>
+  </div>
+
+  <div class="pure-menu social">
+  <ul class="pure-menu-list">
+
+    
+
+    
+
+    
+    <li class="pure-menu-item">
+      <a class="pure-menu-link" href="https://twitter.com/Matt_Craddock" target="_blank"><i class="fa fa-twitter-square fa-fw"></i>Twitter</a>
+    </li>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <li class="pure-menu-item">
+      <a class="pure-menu-link" href="https://github.com/craddm" target="_blank"><i class="fa fa-github-square fa-fw"></i>GitHub</a>
+    </li>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+  </ul>
+</div>
+
+
+  <div>
+  <div class="small-print">
+    <small>&copy; 2016-2017. All rights reserved.</small>
+  </div>
+  <div class="small-print">
+    <small>Built with&nbsp;<a href="https://gohugo.io/" target="_blank">Hugo</a></small>
+    <small>Theme&nbsp;<a href="https://github.com/yoshiharuyamashita/blackburn" target="_blank">Blackburn</a></small>
+  </div>
+</div>
+
+</div>
+
+
+  <div id="main">
+
+
+<div class="header">
+  <h1>EEG processing with Python, but in R?</h1>
+  <h2></h2>
+</div>
+<div class="content">
+
+  <div class="post-meta">
+
+  <div>
+    <i class="fa fa-calendar fa-fw"></i>
+    <time>19 Apr 2017</time>
+  </div>
+
+  
+
+  
+
+  
+  
+  
+  <div>
+    <i class="fa fa-tags fa-fw"></i>
+    
+      <a class="post-taxonomy-tag" href="../../../../tags/eeg">EEG</a>&nbsp;&#47;
+    
+      <a class="post-taxonomy-tag" href="../../../../tags/erps">ERPs</a>&nbsp;&#47;
+    
+      <a class="post-taxonomy-tag" href="../../../../tags/r">R</a>&nbsp;&#47;
+    
+      <a class="post-taxonomy-tag" href="../../../../tags/ggplot2">ggplot2</a>&nbsp;&#47;
+    
+      <a class="post-taxonomy-tag" href="../../../../tags/python">Python</a>
+    
+  </div>
+  
+  
+
+</div>
+
+  <p>As mentioned in my <a href="../../../../2017/04/07/eeg-analysis-in-r-what-s-missing/">last post</a>, an issue doing EEG analysis in R at the moment is that there’s a distinct lack of tools in R for a lot of the typical processing steps. In the past I’ve done a lot of processing in Matlab (specifically with EEGLAB and Fieldtrip) and shifted things over to R for statistics. But all is not lost. For example, with the following code, I can run a bunch of preprocessing, including automatic artefact rejection, and have nice ERPs in R in the blink of an eye!</p>
+<pre class="python"><code>import mne
+import numpy as np
+import pandas
+from autoreject import (LocalAutoRejectCV, compute_thresholds,
+                        set_matplotlib_defaults, plot_epochs)
+from functools import partial
+
+thresh_func = partial(compute_thresholds, method=&#39;random_search&#39;)
+ar = LocalAutoRejectCV(thresh_func=thresh_func, verbose=&#39;progressbar&#39;)
+
+eogChans = (64,65,66,67)
+miscChans = (68,69,70,71)
+
+subjects = []
+
+file_list = []
+for i in range(6):
+    file_list += [&#39;EXAMPLEDATA{0}.bdf&#39;.format(i+1)]
+
+unclean_epochs = []
+for file in file_list):
+    raw = mne.io.read_raw_edf(file,preload = True,eog = eogChans,misc = miscChans)
+    raw.info[&#39;bads&#39;] = [&#39;EXG7&#39;,&#39;EXG8&#39;]
+    picks = mne.pick_types(raw.info, meg=False, eeg=True, eog=False, exclude=&#39;bads&#39;)
+    events = mne.find_events(raw, stim_channel=&#39;STI 014&#39;)
+    event_id = {&#39;light&#39;: 100, &#39;no light&#39;: 128}
+    tmin = -.3
+    tmax = .6
+    raw.filter(1, 45,l_trans_bandwidth = 1, h_trans_bandwidth = 5, filter_length = &#39;auto&#39;)
+    montage = mne.channels.read_montage(&#39;biosemi64&#39;)
+    raw.set_montage(montage)
+    raw_avg_ref, _ = mne.io.set_eeg_reference(raw)
+    epochs_avg_ref = mne.Epochs(raw_avg_ref, events=events, event_id=event_id, tmin=tmin,
+                    tmax=tmax, picks=picks, add_eeg_ref=False,preload = True, detrend = None,decim = 4)
+    unclean_epochs += [epochs_avg_ref]
+
+preclean_epochs = mne.concatenate_epochs(unclean_epochs)
+epochs_ar = ar.fit_transform(preclean_epochs.copy())
+
+evoked_clean = epochs_ar.average()
+evoked_preclean = preclean_epochs.average()
+df = evoked_clean.to_data_frame()
+df.to_csv(&#39;EXAMPLEDATA\\evoked_clean.csv&#39;)
+df = evoked_preclean.to_data_frame()
+df.to_csv(&#39;EXAMPLEDATA\\evoked_preclean.csv&#39;)</code></pre>
+<p>The eagle-eyed amongst you have probably spotted something unusual about this code. No, not that it’s bad. All my code is bad, there’s nothing unusual about that. It’s not R code. It’s Python. I wrote the above code a few months ago when I was just starting out with it. It uses the <a href="https://martinos.org/mne/stable/index.html">MNE</a> package to load the raw data, run <a href="http://autoreject.github.io/">automatic artefact rejection</a>, and save both the cleaned and unclean data as CSVs.</p>
+<p>And yet, even though it’s Python code, I ran it directly in an R Notebook.</p>
+Normally when you set up a code chunk in an R Notebook, you add something like this (without the blocks):
+<pre>
+```{r} 
+Add your code here.
+```
+</pre>
+<p>But a fun thing about R Notebooks is that they’re written in R Markdown, and R Markdown separates your code into individually executable chunks. Those chunks can run code from a variety of <a href="http://rmarkdown.rstudio.com/authoring_knitr_engines.html">different languages</a> when you <a href="https://yihui.name/knitr/">knit</a> the document together, one of which is Python!</p>
+<p>The ‘{r}’ can be replaced with, for example ‘{python}’. Knit will then use the specified language engine to execute the code. Of course, this also requires you to have a functioning Python installation set up on your machine - in Windows, I highly recommend using <a href="https://www.continuum.io/downloads">Anaconda</a> to get things up and running.</p>
+<p>An issue here is that it runs the code as a separate enviroment; you can’t pass things from a Python chunk directly into another chunk, so you have to send it via the file system. Here I just output CSVs; you could also try out <a href="https://blog.rstudio.org/2016/03/29/feather/">feather</a>, which will probably be faster.</p>
+<pre class="r"><code>library(tidyverse)
+library(ggplot2)
+library(scales)
+library(grid)
+library(gridExtra)
+
+clean_data &lt;- read_csv(&#39;C:\\Users\\Matt\\Documents\\Github\\ExploringERPs\\evoked_clean.csv&#39;) %&gt;%
+  gather(electrode, amplitude, -time)
+unclean_data &lt;- read_csv(&#39;C:\\Users\\Matt\\Documents\\Github\\ExploringERPs\\evoked_preclean.csv&#39;) %&gt;%
+  gather(electrode, amplitude, -time)
+
+theme_set(theme_bw())
+
+unclean.plot &lt;- ggplot(unclean_data, aes(time, amplitude))+
+  geom_line(aes(colour = electrode)) +
+  ggtitle(&#39;Before artefact rejection&#39;) +
+  guides(colour = FALSE)
+
+clean.plot &lt;- ggplot(clean_data, aes(time, amplitude))+
+  geom_line(aes(colour = electrode)) +
+  ggtitle(&#39;After artefact rejection&#39;) +
+  guides(colour = FALSE)
+
+grid.arrange(unclean.plot,clean.plot)</code></pre>
+<p><img src="../../../../post/2017-04-19-Python-Pre-processing_files/figure-html/plotCleanVsNot-1.png" width="672" style="display: block; margin: auto;" /></p>
+<div class="figure" style="text-align: center">
+<img src="../../../../post/2017-04-19-Python-Pre-processing_files/figure-html/plot_topgraphy-1.png" alt="ERPs and a topography at 172 ms after stimulus onset" width="384" />
+<p class="caption">
+(#fig:plot_topgraphy)ERPs and a topography at 172 ms after stimulus onset
+</p>
+</div>
+<p>Of course, why do this? Personally, I’m still just getting to grips with Python and MNE, and some of the analyses I want to do aren’t so easy to do in Python (at least not for me, not yet). This is as much a demonstration of the fact that you are not tied to using one language as anything else. You can use multiple languages in combination when you need to, even simultaneously. You can also call R code from Python using, for example, <a href="http://blog.yhat.com/posts/rpy2-combing-the-power-of-r-and-python.html">RPy2</a>.</p>
+<p>Another alternative to running Python in code chunks, as done here, is to use the recently released <a href="https://rdrr.io/cran/reticulate/man/reticulate.html">reticulate</a> package for R, which allows you to run Python code directly within R. So you’d be able to cut out the middleman and not write to disk, as I had to above. I’ll try to get on to that soon!</p>
+
+
+  
+<div class="prev-next-post pure-g">
+  <div class="pure-u-1-24" style="text-align: left;">
+    
+    <a href="../../../../2017/04/07/eeg-analysis-in-r-what-s-missing/"><i class="fa fa-chevron-left"></i></a>
+    
+  </div>
+  <div class="pure-u-10-24">
+    
+    <nav class="prev">
+      <a href="../../../../2017/04/07/eeg-analysis-in-r-what-s-missing/">EEG analysis in R: What &#39;s missing?</a>
+    </nav>
+    
+  </div>
+  <div class="pure-u-2-24">
+    &nbsp;
+  </div>
+  <div class="pure-u-10-24">
+    
+    <nav class="next">
+      <a href="../../../../2017/05/02/maps-of-the-2015-election-results-in-great-britain/">Maps of the 2015 election results in Great Britain</a>
+    </nav>
+    
+  </div>
+  <div class="pure-u-1-24" style="text-align: right;">
+    
+    <a href="../../../../2017/05/02/maps-of-the-2015-election-results-in-great-britain/"><i class="fa fa-chevron-right"></i></a>
+    
+  </div>
+</div>
+
+
+
+  
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+
+(function() {
+    
+    
+    if (window.location.hostname == "localhost")
+        return;
+
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    var disqus_shortname = 'craddmatgithub';
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+</div>
+
+</div>
+</div>
+<script src="../../../../js/ui.js"></script>
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'Your Google Analytics tracking ID', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+
+</body>
+</html>
+

@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Time-frequency Transform</title>
+    <link>/</link>
+    <description>Recent content on Time-frequency Transform</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-gb</language>
+    <copyright>&amp;copy; 2016-2017. All rights reserved.</copyright>
+    <lastBuildDate>Sat, 24 Jun 2017 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>testing draft functions</title>
+      <link>/2017/06/24/testing-draft-functions/</link>
+      <pubDate>Sat, 24 Jun 2017 00:00:00 +0000</pubDate>
+      
+      <guid>/2017/06/24/testing-draft-functions/</guid>
+      <description>Just making sure this doesn&amp;rsquo;t publish draft posts&amp;hellip;</description>
+    </item>
+    
+    <item>
+      <title>Matt Craddock</title>
+      <link>/about/</link>
+      <pubDate>Tue, 30 May 2017 00:00:00 +0000</pubDate>
+      
+      <guid>/about/</guid>
+      <description>I&amp;rsquo;m a post-doctoral Research Fellow at the University of Leeds, UK. I currently study how pre-stimulus brain activity influences perception. I work with Dr Donna Lloyd and the Cognitive Neuroimaging Group in the School of Psychology. I use electroencephalography (EEG), functional magnetic resonance imaging(fMRI), and transcranial alternating current stimulation (tACS).
+This blog was produced using the blogdown package for R. It&amp;rsquo;s rendered using Hugo and is based on the Blackburn theme.</description>
+    </item>
+    
+    <item>
+      <title>Maps of the 2015 election results in Great Britain</title>
+      <link>/2017/05/02/maps-of-the-2015-election-results-in-great-britain/</link>
+      <pubDate>Tue, 02 May 2017 00:00:00 +0000</pubDate>
+      
+      <guid>/2017/05/02/maps-of-the-2015-election-results-in-great-britain/</guid>
+      <description>Occassionally I do something other than playing with EEG data. R can also handle a lot of spatial data - in other words, you can create nice maps. There’s the small matter of an election coming up next month which is probably our last chance of avoiding a disastrous Brexit.
+I decided to try out some of R’s mapping functions and packages to see if I could come up with any useful graphics of the sort you usually see: maps showing turn-out, who won each constituency, things like that.</description>
+    </item>
+    
+    <item>
+      <title>EEG processing with Python, but in R?</title>
+      <link>/2017/04/19/eeg-processing-with-python-but-in-r/</link>
+      <pubDate>Wed, 19 Apr 2017 00:00:00 +0000</pubDate>
+      
+      <guid>/2017/04/19/eeg-processing-with-python-but-in-r/</guid>
+      <description>As mentioned in my last post, an issue doing EEG analysis in R at the moment is that there’s a distinct lack of tools in R for a lot of the typical processing steps. In the past I’ve done a lot of processing in Matlab (specifically with EEGLAB and Fieldtrip) and shifted things over to R for statistics. But all is not lost. For example, with the following code, I can run a bunch of preprocessing, including automatic artefact rejection, and have nice ERPs in R in the blink of an eye!</description>
+    </item>
+    
+    <item>
+      <title>EEG analysis in R: What &#39;s missing?</title>
+      <link>/2017/04/07/eeg-analysis-in-r-what-s-missing/</link>
+      <pubDate>Fri, 07 Apr 2017 00:00:00 +0000</pubDate>
+      
+      <guid>/2017/04/07/eeg-analysis-in-r-what-s-missing/</guid>
+      <description>An issue doing EEG analysis in R at the moment is that the tools just don’t exist to do a lot of the typical processing steps. It’s an extraordinarily complicated thing to produce working packages that cover even a few of the possible ways to analyse EEG data. The makers of tools like EEGLAB, Fieldtrip, and MNE have been doing it a long time, and not on their own. Essentially, there just isn’t a big community of EEG R users to develop and support dedicated packages at the moment.</description>
+    </item>
+    
+    <item>
+      <title>Creating topographical scalp maps: part 2 - colour maps and contour lines</title>
+      <link>/2017/03/02/creating-topographical-scalp-maps-part-2---colour-maps-and-contour-lines/</link>
+      <pubDate>Thu, 02 Mar 2017 00:00:00 +0000</pubDate>
+      
+      <guid>/2017/03/02/creating-topographical-scalp-maps-part-2---colour-maps-and-contour-lines/</guid>
+      <description>In my previous post on plotting topographies in R, ERP Visualization: Creating topographical scalp maps: part 1, I was aiming for maximum comparability with EEGLAB defaults. That meant I used the ‘jet’ colour map, which is what I’m most used to using. You may have noticed that there was no default jet colour map - I had to define one manually. While jet produces nice, punchy looking images, there are a heap of problems associated with it.</description>
+    </item>
+    
+    <item>
+      <title>ERP Visualization: Creating topographical scalp maps: part 1</title>
+      <link>/2017/02/25/erp-visualization-creating-topographical-scalp-maps-part-1/</link>
+      <pubDate>Sat, 25 Feb 2017 00:00:00 +0000</pubDate>
+      
+      <guid>/2017/02/25/erp-visualization-creating-topographical-scalp-maps-part-1/</guid>
+      <description>As well as ERPs or time-frequency plots from individual channels, it’s always useful to see topographical maps of our data. It’s a nice way to see what’s going on across the whole head, showing us whether effects are broadly or narrowly distributed across the whole scalp. So now I’m going to show you how to do topographical plots in R.
+I want to first of all thank alexforrance and Harold Cavendish over on Stack Overflow for being the source of much of the code I’ve adapted here.</description>
+    </item>
+    
+    <item>
+      <title>ERP visualization: Three conditions</title>
+      <link>/2017/01/10/erp-visualization-three-conditions/</link>
+      <pubDate>Tue, 10 Jan 2017 00:00:00 +0000</pubDate>
+      
+      <guid>/2017/01/10/erp-visualization-three-conditions/</guid>
+      <description>In an earlier post I took a look at visualizing ERPs from two conditions at a single electrode. This time I’m going to look at three conditions. As in the previous post, I’ll assume a basic familiarity with ERPs.
+First I’ll load in the full dataset, which contains ERPs for all conditions for all subjects, and whip it into shape.
+library(ggplot2)library(tidyverse)library(afex)library(Rmisc)library(magrittr)levCatGAall &amp;lt;- read_csv(&amp;quot;https://raw.githubusercontent.com/craddm/ExploringERPs/master/levCatGAall.csv&amp;quot;,col_names = c(&amp;quot;Object.</description>
+    </item>
+    
+    <item>
+      <title>ERP visualization: Shiny Demo updated</title>
+      <link>/2016/12/16/erp-visualization-shiny-demo-updated/</link>
+      <pubDate>Fri, 16 Dec 2016 00:00:00 +0000</pubDate>
+      
+      <guid>/2016/12/16/erp-visualization-shiny-demo-updated/</guid>
+      <description>Shiny app updated!In my last post unleashed the Shiny app I’d knocked up in a few hours to do some basic display of different confidence interval types and difference waves. I’ve been hacking away at it on and off and I’ve now added some exciting new features!
+You can now try loading up your own data. You’ll need a .csv file with the following structure:
+No headerComma-separated valuesEach row should be one time-point, one subject, columns should be “condition1”, “condition2”, “Time”, “Subject”Here’s the first few lines of the example data I include (note this is already after import, so it’s stripped the commas between values).</description>
+    </item>
+    
+    <item>
+      <title>ERP visualization: Basic Shiny Demo</title>
+      <link>/2016/12/07/erp-visualization-basic-shiny-demo/</link>
+      <pubDate>Wed, 07 Dec 2016 00:00:00 +0000</pubDate>
+      
+      <guid>/2016/12/07/erp-visualization-basic-shiny-demo/</guid>
+      <description>Shiny appIn an unusual fit of enthusiasm, I decided to have to go at writing a little app in Shiny, a simple programming framework to make web-based apps using R. So, as usual, all programmed using RStudio, the devs who also make Shiny and various fantastic R packages such as dplyr and ggplot2.
+It turned out to be pretty simple. I’m planning to add various additional functions as I get time to work on my blog posts, like allowing people to use their own data, for example.</description>
+    </item>
+    
+    <item>
+      <title>ERP Visualization: Within-subject confidence intervals</title>
+      <link>/2016/11/28/erp-visualization-within-subject-confidence-intervals/</link>
+      <pubDate>Mon, 28 Nov 2016 00:00:00 +0000</pubDate>
+      
+      <guid>/2016/11/28/erp-visualization-within-subject-confidence-intervals/</guid>
+      <description>As I mentioned in a previous post, between-subject confidence intervals/standard errors are not necessarily all that useful when your data is within-subjects. What you’re interested in is the not really the between-subject variability but the variability of the differences between your conditions within subjects. I’m going to use here the command summarySEwithin from the package Rmisc. This removes between-subject variability for within-subject variables, returning corrected standard deviations, standard errors, and confidence intervals.</description>
+    </item>
+    
+    <item>
+      <title>ERP Visualization: timepoint-by-timepoint tests</title>
+      <link>/2016/10/06/running-statistical-tests/</link>
+      <pubDate>Thu, 06 Oct 2016 00:00:00 +0000</pubDate>
+      
+      <guid>/2016/10/06/running-statistical-tests/</guid>
+      <description>Running statistical tests using “purrr”Something which puzzled me for a while was how to efficiently perform running (i.e. timepoint-by-timepoint) statistical tests on ERP/EEG in R. That was solved for me when I discovered the purrr package, another of ggplot2 author Hadley Wickham’s projects. Using the split command, you can easily split a data frame into multiple frames by one of its variables. In the EEG/ERP case, that means I can easily split the data into separate data frames for each timepoint and run my test of choice on each timepoint independently using the map command.</description>
+    </item>
+    
+    <item>
+      <title>ERP Visualization Part 1: Comparing two conditions</title>
+      <link>/2016/09/19/comparing-two-erps/</link>
+      <pubDate>Mon, 19 Sep 2016 00:00:00 +0000</pubDate>
+      
+      <guid>/2016/09/19/comparing-two-erps/</guid>
+      <description>ERP visualization is harder than people think. Often people take the path of least resistance, plotting grand average ERP data as simple traces representing condition means, with no information regarding variability around these means. There are a couple of variations on this simple theme which show regions of significance, but it’s extremely rare to show anything else. A new editorial letter by Rousselet, Foxe, and Bolam in the European Journal of Neuroscience offers some useful guidelines, and Ana Todorovic’s recent post on adding scatterplots to time-series data is also great.</description>
+    </item>
+    
+    <item>
+      <title>Contact</title>
+      <link>/contact/</link>
+      <pubDate>Wed, 09 Apr 2014 00:00:00 +0000</pubDate>
+      
+      <guid>/contact/</guid>
+      <description> First Name  Last Name  E-Mail  City  State AL CA IL      Send   </description>
+    </item>
+    
+  </channel>
+</rss>

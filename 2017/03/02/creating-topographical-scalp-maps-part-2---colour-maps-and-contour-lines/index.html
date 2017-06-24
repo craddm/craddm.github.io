@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="">
+  <meta name="generator" content="Hugo 0.20.7" />
+
+  <title>Creating topographical scalp maps: part 2 - colour maps and contour lines &middot; Time-frequency Transform</title>
+
+  
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pure/0.6.2/pure-min.css">
+
+  <!--[if lte IE 8]>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pure/0.6.2/grids-responsive-old-ie-min.css">
+  <![endif]-->
+  <!--[if gt IE 8]><!-->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pure/0.6.2/grids-responsive-min.css">
+  <!--<![endif]-->
+
+  <!--[if lte IE 8]>
+  <link rel="stylesheet" href="../../../../css/side-menu-old-ie.css">
+  <![endif]-->
+  <!--[if gt IE 8]><!-->
+  <link rel="stylesheet" href="../../../../css/side-menu.css">
+  <!--<![endif]-->
+
+  <link rel="stylesheet" href="../../../../css/blackburn.css">
+
+  
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+  
+  <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet" type="text/css">
+
+  
+  
+
+  
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.11.0/styles/androidstudio.min.css">
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.11.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+  
+
+  <link rel="shortcut icon" href="../../../../img/favicon.ico" type="image/x-icon" />
+
+  
+    <link rel="stylesheet" href="../../../../css/custom.css">
+  
+  
+
+</head>
+
+
+<body>
+<div id="layout">
+
+  
+<a href="#menu" id="menuLink" class="menu-link">
+  
+  <span></span>
+</a>
+<div id="menu">
+
+  
+  <a class="pure-menu-heading brand" href="../../../../">The TFT</a>
+
+
+  <div class="pure-menu">
+    <ul class="pure-menu-list">
+      
+      
+        <li class="pure-menu-item">
+          <a class="pure-menu-link" href="../../../../"><i class='fa fa-home fa-fw'></i>Home</a>
+      
+        </li>
+      
+      
+        <li class="pure-menu-item">
+          <a class="pure-menu-link" href="../../../../post/"><i class='fa fa-list fa-fw'></i>Posts</a>
+      
+        </li>
+      
+      
+        <li class="pure-menu-item">
+          <a class="pure-menu-link" href="../../../../about/"><i class='fa fa-user fa-fw'></i>About</a>
+      
+        </li>
+      
+    </ul>
+  </div>
+
+  <div class="pure-menu social">
+  <ul class="pure-menu-list">
+
+    
+
+    
+
+    
+    <li class="pure-menu-item">
+      <a class="pure-menu-link" href="https://twitter.com/Matt_Craddock" target="_blank"><i class="fa fa-twitter-square fa-fw"></i>Twitter</a>
+    </li>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <li class="pure-menu-item">
+      <a class="pure-menu-link" href="https://github.com/craddm" target="_blank"><i class="fa fa-github-square fa-fw"></i>GitHub</a>
+    </li>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+  </ul>
+</div>
+
+
+  <div>
+  <div class="small-print">
+    <small>&copy; 2016-2017. All rights reserved.</small>
+  </div>
+  <div class="small-print">
+    <small>Built with&nbsp;<a href="https://gohugo.io/" target="_blank">Hugo</a></small>
+    <small>Theme&nbsp;<a href="https://github.com/yoshiharuyamashita/blackburn" target="_blank">Blackburn</a></small>
+  </div>
+</div>
+
+</div>
+
+
+  <div id="main">
+
+
+<div class="header">
+  <h1>Creating topographical scalp maps: part 2 - colour maps and contour lines</h1>
+  <h2></h2>
+</div>
+<div class="content">
+
+  <div class="post-meta">
+
+  <div>
+    <i class="fa fa-calendar fa-fw"></i>
+    <time>02 Mar 2017</time>
+  </div>
+
+  
+
+  
+
+  
+  
+  
+  <div>
+    <i class="fa fa-tags fa-fw"></i>
+    
+      <a class="post-taxonomy-tag" href="../../../../tags/eeg">EEG</a>&nbsp;&#47;
+    
+      <a class="post-taxonomy-tag" href="../../../../tags/erps">ERPs</a>&nbsp;&#47;
+    
+      <a class="post-taxonomy-tag" href="../../../../tags/r">R</a>&nbsp;&#47;
+    
+      <a class="post-taxonomy-tag" href="../../../../tags/ggplot2">ggplot2</a>
+    
+  </div>
+  
+  
+
+</div>
+
+  <p>In my previous post on plotting topographies in R, <a href="../../../../2017/02/25/erp-visualization-creating-topographical-scalp-maps-part-1/">ERP Visualization: Creating topographical scalp maps: part 1</a>, I was aiming for maximum comparability with EEGLAB defaults. That meant I used the ‘jet’ colour map, which is what I’m most used to using. You may have noticed that there was no default <em>jet</em> colour map - I had to define one manually. While <em>jet</em> produces nice, punchy looking images, there are a heap of problems associated with it. I’m not going to rehash them in detail here, as there are numerous other posts all over the internet that do them all much better justice than I will, and I try to choose which wheels to reinvent wisely. If you want to read in more detail, check out <a href="https://mycarta.wordpress.com/2012/05/12/the-rainbow-is-dead-long-live-the-rainbow-part-1/">“The rainbow is dead, long live the rainbow”</a> by Matteo Niccoli, a helpful PDF summarising the whole debate over on <a href="https://www.mathworks.com/tagteam/81137_92238v00_RainbowColorMap_57312.pdf">Mathworks</a>, and <a href="(https://medium.com/@cMadan/thinking-about-colors-part-1-of-2-9287d462c44c#.z7wfaed17)">“Thinking about colors [Part 1 of 2]”</a> by <a href="https://twitter.com/cMadan/">Chris Madan</a>.</p>
+<p>Some key points:</p>
+<ul>
+<li>Jet is not perceptually uniform. The difference between colours is not linear with increasing distance between points. It can change very quickly with small changes in value, and yet can also be very similar for relatively large differences. This can create the impression of large changes when the actual changes are small, or small changes when the actual changes are small.</li>
+<li>Jet is not robust to colour blindness. It’s inconsistent across its range and it can be hard figuring out which colours are high and which low.</li>
+<li>Jet prints badly in black and white.</li>
+</ul>
+<p>If you’re still not convinced, even Matlab changed their default from ‘jet’ to ‘parula’ in version 2014b, which was news to me as I am stuck with 2012b.</p>
+<p>Here’s the topography from the last post in all its glory:</p>
+<p><img src="../../../../post/2017-03-02-EEG-topographyColourMaps_files/figure-html/loadPackages-1.png" width="480" style="display: block; margin: auto;" /></p>
+<p>The code that defined the colour map and applied it to the topography is:</p>
+<pre class="r"><code>jet.colors &lt;- colorRampPalette(c(&quot;#00007F&quot;, &quot;blue&quot;, &quot;#007FFF&quot;, &quot;cyan&quot;, &quot;#7FFF7F&quot;, &quot;yellow&quot;, &quot;#FF7F00&quot;, &quot;red&quot;, &quot;#7F0000&quot;))
+
+#v4plot is the plot object
+v4plot + scale_fill_gradientn(colours = jet.colors(10),
+                       limits = c(-2,2),
+                       guide = &quot;colourbar&quot;,
+                       oob = squish)</code></pre>
+<p>The first thing that is apparent is that you can define whatever colour map you like. Second, when you’ve defined your plotting object (in this case, v4plot), you can change the colourmap simply by adding a new one to the existing plot object.</p>
+<div id="colormap-choices" class="section level2">
+<h2>Colormap choices</h2>
+<p>So how do you go about choosing what colourmap to use? Luckily, there are a whole bunch of options out there that are already designed to solve the problems identified above.</p>
+<p>With ggplot2, use of these various colourmaps is trivially easy. Many are already available thanks to RColorBrewer, an implementation of <a href="http://www.personal.psu.edu/cab38/">Cynthia Brewer’s</a> <a href="http://colorbrewer2.org/#type=sequential&amp;scheme=BuGn&amp;n=3">colourmaps</a>. Other nice colour schemes are available through the <em>viridis</em> package, which implements the perceptually uniform colour maps from Python’s <a href="http://matplotlib.org/">matplotlib</a>.</p>
+</div>
+<div id="sequential-colour-maps" class="section level2">
+<h2>Sequential colour maps</h2>
+<p>Sequential colour maps take a single colour (approximately…) that varies smoothly between two tones. These have the advantage they show a clear linear progression from the bottom to the top of the scale. Matplotlib’s default colour maps print nicely in black and white, are robust to colour blindness, and span a good range of the palette to make differences in scale easy to see. After loading the <em>viridis</em> package, they can be used as below:</p>
+<pre class="r"><code>library(viridis)
+viridisPlot &lt;- v4plot + scale_fill_gradientn(colours = viridis(10),
+                              limits = c(-2,2),
+                              guide = &quot;colourbar&quot;,
+                              oob = squish) +
+  ggtitle(&#39;Viridis&#39;)
+magmaPlot &lt;- v4plot + scale_fill_gradientn(colours = viridis(10, option = &quot;A&quot;),
+                              limits = c(-2,2),
+                              guide = &quot;colourbar&quot;,
+                              oob = squish)+
+  ggtitle(&#39;Magma&#39;)
+
+infernoPlot &lt;- v4plot + scale_fill_gradientn(colours = viridis(10, option = &quot;B&quot;),
+                              limits = c(-2,2),
+                              guide = &quot;colourbar&quot;,
+                              oob = squish)+
+  ggtitle(&#39;Inferno&#39;)
+plasmaPlot &lt;- v4plot + scale_fill_gradientn(colours = viridis(10, option = &quot;C&quot;),
+                              limits = c(-2,2),
+                              guide = &quot;colourbar&quot;,
+                              oob = squish)+
+  ggtitle(&#39;Plasma&#39;)
+
+grid.arrange(viridisPlot, magmaPlot, infernoPlot, plasmaPlot, ncol = 2, nrow = 2)</code></pre>
+<p><img src="../../../../post/2017-03-02-EEG-topographyColourMaps_files/figure-html/plotViridis-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>From a first glance, I probably like Plasma and Viridis best from these options. One thing I like about the sequential maps is that they don’t place too much emphasis on any particular point, doing a good job of conveying the smoothness of the topography and not imposing any sharp transitions. These particular colour schemes would also be good for displaying raw spectral power in time-frequency plots or topographies. Raw spectral power (i.e. power which is not baseline corrected) is all-positive, so has no natural reference point such as zero to form the center of its scale.</p>
+</div>
+<div id="diverging-colour-maps" class="section level2">
+<h2>Diverging colour maps</h2>
+<p>Diverging colour maps use two different colours either side of a reference point, so they’re nice for showing when something is above or below some sort of important value. For example, on an ERP topography you’re probably keen to know where the amplitude is above zero and where it is below zero.</p>
+<pre class="r"><code> RdBuPlot &lt;- v4plot + scale_fill_distiller(type = &quot;div&quot;,palette = &quot;RdBu&quot;,limits = c(-2,2),
+                              guide = &quot;colourbar&quot;,
+                              oob = squish) +
+  ggtitle(&#39;RdBu&#39;)
+
+PuOrPlot &lt;- v4plot + scale_fill_distiller(type = &quot;div&quot;,palette = &quot;PuOr&quot;,limits = c(-2,2),
+                              guide = &quot;colourbar&quot;,
+                              oob = squish) +
+  ggtitle(&#39;PuOr&#39;)
+
+RdYlGnPlot &lt;- v4plot + scale_fill_distiller(type = &quot;div&quot;,palette = &quot;RdYlGn&quot;,limits = c(-2,2),
+                              guide = &quot;colourbar&quot;,
+                              oob = squish) +
+  ggtitle(&#39;RdYlGn&#39;)
+
+PiYGPlot &lt;- v4plot + scale_fill_distiller(type = &quot;div&quot;,palette = &quot;BrBG&quot;,limits = c(-2,2),
+                              guide = &quot;colourbar&quot;,
+                              oob = squish) +
+  ggtitle(&#39;BrBG&#39;)
+
+grid.arrange(RdBuPlot, PuOrPlot, RdYlGnPlot, PiYGPlot, ncol = 2, nrow = 2)</code></pre>
+<p><img src="../../../../post/2017-03-02-EEG-topographyColourMaps_files/figure-html/diverge-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>Again, these are quite an improvement over Jet-style colour maps, and are particularly useful for showing data with a clear reference point (e.g. ERPs or baseline-corrected time-frequency plots/topographies).</p>
+</div>
+<div id="mne-style-maps-and-contours" class="section level2">
+<h2>MNE style maps and contours</h2>
+<p><a href="http://martinos.org/mne/stable/index.html">MNE</a> is a really comprehensive package for Python that offers many advanced tools for M/EEG analysis. Their default colourmap is the RdBu diverging map shown above. A neat trick I like on their topographies is that the contour lines change with the amplitude within each contour level; specifically, contours around amplitudes greater than or equal to zero use solid lines, while contours around amplitudes less than zero use dashed lines. That’s also simple to do in ggplot2. Note that here I also define a custom version of the “RdBu” colormap to make it a bit more punchy, like the MNE plots.</p>
+<pre class="r"><code>matplotlibRdBu_r &lt;- colorRampPalette(c(&quot;#053061&quot;,&quot;#4694C4&quot;,&quot;#F6F6F6&quot;,&quot;#E7886C&quot;,&quot;#67001F&quot;),interpolate = &quot;spline&quot;)
+
+
+v4plot &lt;- ggplot(interpV4[interpV4$incircle,],aes(x = x, y = y, fill = amplitude))+
+  geom_raster()+
+  stat_contour(aes(z = amplitude,linetype = ..level..&lt;0),
+               bins = 6,
+               colour = &quot;black&quot;,
+               size = 1.2,
+               show.legend = FALSE
+               )+
+  theme_topo()+
+   geom_path(data = maskRing,
+            aes(x, y, z = NULL, fill =NULL),
+            colour = &quot;white&quot;,
+            size = 6)+ scale_fill_gradientn(colours = matplotlibRdBu_r(10),
+                        limits = c(-2,2),
+                        guide = &quot;colourbar&quot;,
+                        oob = squish)+
+  geom_point(data = singleTimepoint,
+             aes(x,y),
+             size = 1)+
+  geom_path(data = headShape,
+            aes(x,y,z = NULL,fill = NULL),
+            size = 1)+
+  geom_path(data = nose,
+            aes(x, y, z = NULL, fill = NULL),
+            size = 1)+
+  coord_equal()
+
+v4plot</code></pre>
+<p><img src="../../../../post/2017-03-02-EEG-topographyColourMaps_files/figure-html/MNEstyle-1.png" width="384" style="display: block; margin: auto;" /></p>
+<p>The trick is in this code:</p>
+<pre class="r"><code> stat_contour(aes(z = amplitude,linetype = ..level..&lt;0),
+               bins = 6,
+               colour = &quot;black&quot;,
+               size = 1.2,
+               show.legend = FALSE
+               )</code></pre>
+<p><em>stat_contour</em> creates a new data frame internally which splits the data into bins. This new dataframe has a column “level”, which is the value of each bin edge. Columns from internally generated dataframes can be accessed using ..[column name].., so I simply check if the level is less than 0, which sets the linetype to different numbers for bins &gt;=0 than for bins &lt;0.</p>
+</div>
+
+
+  
+<div class="prev-next-post pure-g">
+  <div class="pure-u-1-24" style="text-align: left;">
+    
+    <a href="../../../../2017/02/25/erp-visualization-creating-topographical-scalp-maps-part-1/"><i class="fa fa-chevron-left"></i></a>
+    
+  </div>
+  <div class="pure-u-10-24">
+    
+    <nav class="prev">
+      <a href="../../../../2017/02/25/erp-visualization-creating-topographical-scalp-maps-part-1/">ERP Visualization: Creating topographical scalp maps: part 1</a>
+    </nav>
+    
+  </div>
+  <div class="pure-u-2-24">
+    &nbsp;
+  </div>
+  <div class="pure-u-10-24">
+    
+    <nav class="next">
+      <a href="../../../../2017/04/07/eeg-analysis-in-r-what-s-missing/">EEG analysis in R: What &#39;s missing?</a>
+    </nav>
+    
+  </div>
+  <div class="pure-u-1-24" style="text-align: right;">
+    
+    <a href="../../../../2017/04/07/eeg-analysis-in-r-what-s-missing/"><i class="fa fa-chevron-right"></i></a>
+    
+  </div>
+</div>
+
+
+
+  
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+
+(function() {
+    
+    
+    if (window.location.hostname == "localhost")
+        return;
+
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    var disqus_shortname = 'craddmatgithub';
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+</div>
+
+</div>
+</div>
+<script src="../../../../js/ui.js"></script>
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'Your Google Analytics tracking ID', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+
+</body>
+</html>
+

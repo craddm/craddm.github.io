@@ -1,0 +1,17 @@
+img {
+  display: block;
+  margin: 0 0 1rem;
+  border-radius: 5px;
+  height: auto;
+  max-width: 100%;
+}
+
+.disqus-comments {
+  margin-top: 30px;
+}
+
+@media only screen and (min-width: 768px) {
+  .disqus-comments {
+    margin-top: 40px;
+  }
+}
